@@ -1,36 +1,65 @@
-# Button
+# Button Component
 
-Highly-configurable button component supporting multiple variants, appearances, sizes, icons, loading states, and accessibility—all in one composable component.
+## Overview
 
----
+The Button component is a highly versatile interactive element that supports multiple variants, sizes, appearances, loading states, icons, and accessibility features. Built with Genesis Design System tokens, it provides consistent styling across themes while offering extensive customization options for different use cases from simple actions to complex AI-powered features.
 
-## 1. Quick start
+## Component API
+
+### Button Props
+
+| Prop                 | Type                                                                       | Default     | Description                                       |
+| -------------------- | -------------------------------------------------------------------------- | ----------- | ------------------------------------------------- |
+| `children`           | `string`                                                                   | `"Click"`   | Button text content (required)                    |
+| `size`               | `'xs' \| 's' \| 'm' \| 'l' \| 'xl'`                                        | `'m'`       | Button size controlling dimensions and typography |
+| `kind`               | `'primary' \| 'secondary' \| 'tertiary'`                                   | `'primary'` | Button style variant determining visual hierarchy |
+| `appearance`         | `'default' \| 'contrast' \| 'positive' \| 'negative' \| 'warning' \| 'ai'` | `'default'` | Color scheme variant for semantic meaning         |
+| `loading`            | `boolean`                                                                  | `false`     | Shows loading spinner and disables interaction    |
+| `disabled`           | `boolean`                                                                  | `false`     | Disables button and prevents interaction          |
+| `fullWidth`          | `boolean`                                                                  | `false`     | Makes button expand to full container width       |
+| `prefixIcon`         | `React.ReactNode`                                                          | `undefined` | Icon displayed before the button text             |
+| `suffixIcon`         | `React.ReactNode`                                                          | `undefined` | Icon displayed after the button text              |
+| `hideUnderline`      | `boolean`                                                                  | `false`     | Hides underline decoration for tertiary buttons   |
+| `iconContainerProps` | `React.HTMLAttributes<HTMLSpanElement>`                                    | `undefined` | Props for the icon container elements             |
+| `iconProps`          | `React.HTMLAttributes<SVGElement>`                                         | `undefined` | Props passed directly to icon elements            |
+| `className`          | `string`                                                                   | `undefined` | Additional CSS classes for custom styling         |
+| `onClick`            | `(event: React.MouseEvent<HTMLButtonElement>) => void`                     | `undefined` | Click event handler                               |
+| `type`               | `'button' \| 'submit' \| 'reset'`                                          | `'button'`  | HTML button type attribute                        |
+| `...props`           | `React.ButtonHTMLAttributes<HTMLButtonElement>`                            | `{}`        | Additional HTML button attributes                 |
+
+## Basic Usage
 
 ```tsx
 import { Button } from "gends";
 
-function Example() {
-  return (
-    <Button onClick={() => alert('Clicked!')}>
-      Click me
-    </Button>
-  );
-}
+// Default primary button
+<Button>Click me</Button>
+
+// With custom appearance and size
+<Button kind="secondary" appearance="positive" size="l">
+  Confirm Action
+</Button>
+
+// With icons
+<Button prefixIcon={<PlusIcon />} suffixIcon={<ChevronRightIcon />}>
+  Add Item
+</Button>
 ```
 
----
+## Size Variants
 
-## 2. Sizes
+The Button component supports five size variants optimized for different use cases:
 
-| size   | Height | Recommended type scale |
-|--------|--------|-----------------------|
-| `xs`   | 24 px  | `body-s`              |
-| `s`    | 32 px  | `body-m`              |
-| `m`    | 40 px  | `body-m`              |
-| `l`    | 48 px  | `body-l`              |
-| `xl`   | 56 px  | `body-xl`             |
+| Size | Height | Padding     | Font Size | Use Case                    |
+| ---- | ------ | ----------- | --------- | --------------------------- |
+| `xs` | 24px   | 8px × 4px   | 12px      | Compact spaces, dense UIs   |
+| `s`  | 32px   | 12px × 4px  | 14px      | Table actions, inline forms |
+| `m`  | 40px   | 16px × 8px  | 14px      | Standard button size        |
+| `l`  | 48px   | 20px × 12px | 16px      | Primary CTAs, emphasized    |
+| `xl` | 64px   | 32px × 16px | 24px      | Hero sections, landing CTA  |
 
 ```tsx
+// Size variants
 <Button size="xs">Extra Small</Button>
 <Button size="s">Small</Button>
 <Button size="m">Medium</Button>
@@ -38,291 +67,696 @@ function Example() {
 <Button size="xl">Extra Large</Button>
 ```
 
----
+## Button Kinds
 
-## 3. Kinds & Appearances
+### Primary Buttons
 
-### Kind
-
-| kind        | Description                |
-|-------------|---------------------------|
-| `primary`   | Main action, filled       |
-| `secondary` | Secondary action, subtle  |
-| `tertiary`  | Minimal, text-like        |
-
-### Appearance
-
-| appearance   | Description                |
-|--------------|---------------------------|
-| `default`    | Standard                  |
-| `positive`   | Success/confirm           |
-| `negative`   | Error/destructive         |
-| `warning`    | Warning                   |
-| `contrast`   | High-contrast             |
-| `ai`         | AI/assistant action       |
-
-### All Kind + Appearance Combinations
-
-| Kind       | Appearance    | Example Code |
-|------------|--------------|--------------|
-| primary    | default      | `<Button kind="primary" appearance="default">Primary</Button>` |
-| primary    | positive     | `<Button kind="primary" appearance="positive">Primary Positive</Button>` |
-| primary    | negative     | `<Button kind="primary" appearance="negative">Primary Negative</Button>` |
-| primary    | warning      | `<Button kind="primary" appearance="warning">Primary Warning</Button>` |
-| primary    | contrast     | `<Button kind="primary" appearance="contrast">Primary Contrast</Button>` |
-| primary    | ai           | `<Button kind="primary" appearance="ai">Primary AI</Button>` |
-| secondary  | default      | `<Button kind="secondary" appearance="default">Secondary</Button>` |
-| secondary  | positive     | `<Button kind="secondary" appearance="positive">Secondary Positive</Button>` |
-| secondary  | negative     | `<Button kind="secondary" appearance="negative">Secondary Negative</Button>` |
-| secondary  | warning      | `<Button kind="secondary" appearance="warning">Secondary Warning</Button>` |
-| secondary  | contrast     | `<Button kind="secondary" appearance="contrast">Secondary Contrast</Button>` |
-| secondary  | ai           | `<Button kind="secondary" appearance="ai">Secondary AI</Button>` |
-| tertiary   | default      | `<Button kind="tertiary" appearance="default">Tertiary</Button>` |
-| tertiary   | positive     | `<Button kind="tertiary" appearance="positive">Tertiary Positive</Button>` |
-| tertiary   | negative     | `<Button kind="tertiary" appearance="negative">Tertiary Negative</Button>` |
-| tertiary   | warning      | `<Button kind="tertiary" appearance="warning">Tertiary Warning</Button>` |
-| tertiary   | contrast     | `<Button kind="tertiary" appearance="contrast">Tertiary Contrast</Button>` |
-| tertiary   | ai           | `<Button kind="tertiary" appearance="ai">Tertiary AI</Button>` |
-
----
-
-## 4. States
-
-| State      | Description                        |
-|------------|------------------------------------|
-| `default`  | Normal, interactive                |
-| `hover`    | On mouse hover                     |
-| `active`   | On click/press                     |
-| `focus`    | Keyboard focus, shows ring         |
-| `disabled` | Non-interactive, faded             |
-| `loading`  | Shows spinner, disables actions    |
+Solid background with high visual prominence for main actions:
 
 ```tsx
-<Button disabled>Disabled</Button>
-<Button loading>Loading</Button>
+<Button kind="primary" appearance="default">Primary Action</Button>
+<Button kind="primary" appearance="positive">Save Changes</Button>
+<Button kind="primary" appearance="negative">Delete Item</Button>
+<Button kind="primary" appearance="warning">Proceed with Caution</Button>
+<Button kind="primary" appearance="ai">Generate with AI</Button>
 ```
 
----
+### Secondary Buttons
 
-## 5. Icons
-
-Buttons can display icons before (prefix) or after (suffix) the label, or both.
-
-| Prop         | Type         | Description                        |
-|--------------|--------------|------------------------------------|
-| `prefixIcon` | `ReactNode`  | Icon before the label              |
-| `suffixIcon` | `ReactNode`  | Icon after the label               |
+Outlined style for secondary actions that complement primary buttons:
 
 ```tsx
-<Button prefixIcon={<IcImport />}>Download</Button>
-<Button suffixIcon={<IcImport />}>Download</Button>
-<Button prefixIcon={<IcImport />} suffixIcon={<IcMoreHorizontal />}>Download</Button>
+<Button kind="secondary" appearance="default">Secondary Action</Button>
+<Button kind="secondary" appearance="positive">Approve</Button>
+<Button kind="secondary" appearance="negative">Reject</Button>
+<Button kind="secondary" appearance="warning">Review</Button>
+<Button kind="secondary" appearance="contrast">Light Theme</Button>
 ```
 
-### Icon + Size Combinations
+### Tertiary Buttons
+
+Text-only buttons for subtle actions and navigation links:
 
 ```tsx
-<Button size="xs" prefixIcon={<IcImport />}>XS</Button>
-<Button size="s" suffixIcon={<IcImport />}>S</Button>
-<Button size="m" prefixIcon={<IcImport />} suffixIcon={<IcMoreHorizontal />}>M</Button>
-<Button size="l" prefixIcon={<IcImport />}>L</Button>
-<Button size="xl" suffixIcon={<IcImport />}>XL</Button>
+<Button kind="tertiary" appearance="default">Learn More</Button>
+<Button kind="tertiary" appearance="positive">View Details</Button>
+<Button kind="tertiary" appearance="negative">Cancel</Button>
+<Button kind="tertiary" hideUnderline>No Underline</Button>
 ```
 
-### Both Left and Right Icons
+## Appearance Variants
+
+### Default Appearance
+
+Standard blue color scheme for general actions:
 
 ```tsx
-<Button prefixIcon={<IcImport />} suffixIcon={<IcMoreHorizontal />}>Download</Button>
+<Button kind="primary" appearance="default">Primary Default</Button>
+<Button kind="secondary" appearance="default">Secondary Default</Button>
+<Button kind="tertiary" appearance="default">Tertiary Default</Button>
 ```
 
----
+### Contrast Appearance
 
-## 6. Full width
-
-Set `fullWidth` to make the button stretch to its container.
+Light colors designed for dark backgrounds:
 
 ```tsx
-<Button fullWidth>Full Width</Button>
-<Button fullWidth prefixIcon={<IcImport />} loading>Full Width Loading</Button>
+<div className="bg-gray-900 p-4">
+  <Button kind="primary" appearance="contrast">
+    Light on Dark
+  </Button>
+  <Button kind="secondary" appearance="contrast">
+    Outlined Light
+  </Button>
+  <Button kind="tertiary" appearance="contrast">
+    Text Light
+  </Button>
+</div>
 ```
 
----
+### Positive Appearance
 
-## 7. Accessibility
-
-- All buttons are keyboard accessible by default.
-- Use `aria-label` for icon-only buttons.
-- Focus ring is visible for keyboard navigation.
+Green color scheme for success and confirmation actions:
 
 ```tsx
-<Button aria-label="Download" prefixIcon={<IcImport />} />
+<Button kind="primary" appearance="positive">Save Changes</Button>
+<Button kind="secondary" appearance="positive">Approve Request</Button>
+<Button kind="tertiary" appearance="positive">View Success</Button>
 ```
 
----
+### Negative Appearance
 
-## 8. Full prop reference
-
-| Prop           | Type                                      | Default     | Description                                 |
-|----------------|-------------------------------------------|-------------|---------------------------------------------|
-| `children`     | `ReactNode`                               | –           | Button label                                |
-| `onClick`      | `(e: MouseEvent) => void`                 | –           | Click handler                               |
-| `size`         | `'xs' \| 's' \| 'm' \| 'l' \| 'xl'`        | `'m'`       | Button size                                 |
-| `kind`         | `'primary' \| 'secondary' \| 'tertiary'`   | `'primary'` | Button kind                                 |
-| `appearance`   | `'default' \| 'positive' \| 'negative' \| 'warning' \| 'contrast' \| 'ai'` | `'default'` | Visual appearance                           |
-| `prefixIcon`   | `ReactNode`                               | –           | Icon before label                           |
-| `suffixIcon`   | `ReactNode`                               | –           | Icon after label                            |
-| `loading`      | `boolean`                                 | `false`     | Show loading spinner, disables button       |
-| `disabled`     | `boolean`                                 | `false`     | Disable button                              |
-| `fullWidth`    | `boolean`                                 | `false`     | Stretch to container width                  |
-| `type`         | `'button' \| 'submit' \| 'reset'`         | `'button'`  | Button type                                 |
-| `hideUnderline`| `boolean`                                 | `false`     | Hide underline (for link/tertiary)          |
-| `className`    | `string`                                  | –           | Custom class for root element               |
-| `iconClassName`| `string`                                  | –           | Custom class for icon(s)                    |
-| `aria-label`   | `string`                                  | –           | Accessibility label (for icon-only)         |
-
----
-
-## 9. Recipes
-
-### Primary with left icon
+Red color scheme for destructive and danger actions:
 
 ```tsx
-<Button prefixIcon={<IcImport />}>Import</Button>
+<Button kind="primary" appearance="negative">Delete Account</Button>
+<Button kind="secondary" appearance="negative">Remove Item</Button>
+<Button kind="tertiary" appearance="negative">Cancel Action</Button>
 ```
 
-### Secondary with right icon
+### Warning Appearance
+
+Orange color scheme for caution and warning actions:
 
 ```tsx
-<Button kind="secondary" suffixIcon={<IcMoreHorizontal />}>More</Button>
+<Button kind="primary" appearance="warning">Proceed Anyway</Button>
+<Button kind="secondary" appearance="warning">Review Changes</Button>
+<Button kind="tertiary" appearance="warning">See Warnings</Button>
 ```
 
-### Tertiary, icon only
+### AI Appearance
+
+Special gradient design for AI-powered features (Primary only):
 
 ```tsx
-<Button kind="tertiary" aria-label="More options" prefixIcon={<IcMoreHorizontal />} />
+<Button kind="primary" appearance="ai" prefixIcon={<SparklesIcon />}>
+  Generate with AI
+</Button>
 ```
 
-### Loading state
+## Icons and Content
+
+### Icon Positioning
+
+Add icons before or after text content with automatic sizing:
 
 ```tsx
-<Button loading>Loading…</Button>
-<Button kind="secondary" loading>Secondary Loading</Button>
-<Button kind="tertiary" appearance="warning" loading>Warning Tertiary Loading</Button>
+// Prefix icon
+<Button prefixIcon={<PlusIcon />}>Add New</Button>
+
+// Suffix icon
+<Button suffixIcon={<ChevronRightIcon />}>Continue</Button>
+
+// Both icons
+<Button prefixIcon={<DownloadIcon />} suffixIcon={<ExternalLinkIcon />}>
+  Download File
+</Button>
 ```
 
-### Full width, large, destructive
+### Icon-Only Buttons
+
+Create compact icon-only buttons with screen reader support:
 
 ```tsx
-<Button fullWidth size="l" appearance="negative">Delete</Button>
-<Button fullWidth size="xl" kind="secondary" appearance="contrast">Contrast Secondary XL</Button>
+<Button size="s" prefixIcon={<EditIcon />} className="px-2">
+  <span className="sr-only">Edit item</span>
+</Button>
+
+<Button size="m" prefixIcon={<DeleteIcon />} className="px-3" appearance="negative">
+  <span className="sr-only">Delete item</span>
+</Button>
 ```
 
-### Both left and right icons, loading, and fullWidth
+### Custom Icon Styling
+
+Control icon appearance with advanced props:
 
 ```tsx
-<Button fullWidth loading prefixIcon={<IcImport />} suffixIcon={<IcMoreHorizontal />}>Download All</Button>
+<Button
+  prefixIcon={<CustomIcon />}
+  iconProps={{ className: "text-blue-500" }}
+  iconContainerProps={{ className: "mr-3" }}
+>
+  Custom Icon Style
+</Button>
 ```
 
+## Loading States
+
+Show loading spinners while preserving button dimensions:
+
 ```tsx
-// Basic usage
-<Button>Default</Button>
-<Button onClick={() => alert('Clicked!')}>With Click</Button>
+const [isSubmitting, setIsSubmitting] = useState(false);
 
-// Sizes
-<Button size="xs">XS</Button>
-<Button size="s">Small</Button>
-<Button size="m">Medium</Button>
-<Button size="l">Large</Button>
-<Button size="xl">XL</Button>
+<Button
+  loading={isSubmitting}
+  onClick={async () => {
+    setIsSubmitting(true);
+    await submitForm();
+    setIsSubmitting(false);
+  }}
+>
+  {isSubmitting ? "Submitting..." : "Submit Form"}
+</Button>;
+```
 
-// Kinds
-<Button kind="primary">Primary</Button>
-<Button kind="secondary">Secondary</Button>
-<Button kind="tertiary">Tertiary</Button>
+### Loading with Different Sizes
 
-// Appearances
-<Button appearance="default">Default</Button>
-<Button appearance="positive">Positive</Button>
-<Button appearance="negative">Negative</Button>
-<Button appearance="warning">Warning</Button>
-<Button appearance="contrast">Contrast</Button>
-<Button appearance="ai">AI</Button>
+Loading spinners automatically scale with button size:
 
-// Kind + Appearance combinations
-<Button kind="primary" appearance="positive">Primary Positive</Button>
-<Button kind="primary" appearance="negative">Primary Negative</Button>
-<Button kind="primary" appearance="warning">Primary Warning</Button>
-<Button kind="primary" appearance="contrast">Primary Contrast</Button>
-<Button kind="primary" appearance="ai">Primary AI</Button>
-<Button kind="secondary" appearance="positive">Secondary Positive</Button>
-<Button kind="secondary" appearance="negative">Secondary Negative</Button>
-<Button kind="secondary" appearance="warning">Secondary Warning</Button>
-<Button kind="secondary" appearance="contrast">Secondary Contrast</Button>
-<Button kind="secondary" appearance="ai">Secondary AI</Button>
-<Button kind="tertiary" appearance="positive">Tertiary Positive</Button>
-<Button kind="tertiary" appearance="negative">Tertiary Negative</Button>
-<Button kind="tertiary" appearance="warning">Tertiary Warning</Button>
-<Button kind="tertiary" appearance="contrast">Tertiary Contrast</Button>
-<Button kind="tertiary" appearance="ai">Tertiary AI</Button>
+```tsx
+<Button size="xs" loading>Small Loading</Button>
+<Button size="m" loading>Medium Loading</Button>
+<Button size="xl" loading>Large Loading</Button>
+```
 
-// Disabled
-<Button disabled>Disabled</Button>
-<Button kind="secondary" disabled>Secondary Disabled</Button>
-<Button kind="tertiary" appearance="warning" disabled>Tertiary Warning Disabled</Button>
+## Layout Options
 
-// Loading
-<Button loading>Loading</Button>
-<Button kind="secondary" loading>Secondary Loading</Button>
-<Button kind="tertiary" appearance="negative" loading>Tertiary Negative Loading</Button>
+### Full Width Buttons
 
-// Full width
-<Button fullWidth>Full Width</Button>
-<Button fullWidth kind="secondary">Full Width Secondary</Button>
-<Button fullWidth kind="tertiary" appearance="ai">Full Width Tertiary AI</Button>
+Expand buttons to fill container width:
 
-// Prefix (left) icon
-<Button prefixIcon={<IcImport />}>Left Icon</Button>
-<Button size="l" prefixIcon={<IcImport />}>Large Left Icon</Button>
-<Button kind="secondary" prefixIcon={<IcImport />}>Secondary Left Icon</Button>
+```tsx
+<div className="w-full max-w-md">
+  <Button fullWidth kind="primary" size="l">
+    Full Width Primary
+  </Button>
+  <Button fullWidth kind="secondary" className="mt-2">
+    Full Width Secondary
+  </Button>
+</div>
+```
 
-// Suffix (right) icon
-<Button suffixIcon={<IcMoreHorizontal />}>Right Icon</Button>
-<Button size="xl" suffixIcon={<IcMoreHorizontal />}>XL Right Icon</Button>
-<Button kind="tertiary" suffixIcon={<IcMoreHorizontal />}>Tertiary Right Icon</Button>
+### Button Groups
 
-// Both prefix and suffix icons
-<Button prefixIcon={<IcImport />} suffixIcon={<IcMoreHorizontal />}>Both Icons</Button>
-<Button size="s" prefixIcon={<IcImport />} suffixIcon={<IcMoreHorizontal />}>Small Both Icons</Button>
-<Button kind="secondary" appearance="contrast" prefixIcon={<IcImport />} suffixIcon={<IcMoreHorizontal />}>Secondary Contrast Both Icons</Button>
+Create cohesive button layouts:
 
-// Icon only (aria-label for accessibility)
-<Button prefixIcon={<IcImport />} aria-label="Import" />
-<Button suffixIcon={<IcMoreHorizontal />} aria-label="More" />
-<Button prefixIcon={<IcImport />} suffixIcon={<IcMoreHorizontal />} aria-label="Import and More" />
+```tsx
+// Horizontal button group
+<div className="flex gap-3">
+  <Button kind="secondary">Cancel</Button>
+  <Button kind="primary" appearance="positive">Confirm</Button>
+</div>
 
-// Loading with icons
-<Button loading prefixIcon={<IcImport />}>Loading Left Icon</Button>
-<Button loading suffixIcon={<IcMoreHorizontal />}>Loading Right Icon</Button>
-<Button loading prefixIcon={<IcImport />} suffixIcon={<IcMoreHorizontal />}>Loading Both Icons</Button>
+// Vertical button group
+<div className="flex flex-col gap-2 w-full max-w-xs">
+  <Button fullWidth>Primary Action</Button>
+  <Button fullWidth kind="secondary">Secondary Action</Button>
+  <Button fullWidth kind="tertiary">Tertiary Action</Button>
+</div>
+```
 
-// Full width with icons and loading
-<Button fullWidth loading prefixIcon={<IcImport />}>Full Width Loading Left Icon</Button>
-<Button fullWidth loading suffixIcon={<IcMoreHorizontal />}>Full Width Loading Right Icon</Button>
-<Button fullWidth loading prefixIcon={<IcImport />} suffixIcon={<IcMoreHorizontal />}>Full Width Loading Both Icons</Button>
+## Advanced Use Cases
 
-// All props (example)
+### Form Submission
+
+Handle form states with validation:
+
+```tsx
+const FormExample = () => {
+  const [isValid, setIsValid] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  return (
+    <form onSubmit={handleSubmit}>
+      {/* Form fields */}
+      <div className="flex gap-2 mt-4">
+        <Button type="button" kind="secondary">
+          Cancel
+        </Button>
+        <Button type="submit" disabled={!isValid} loading={isSubmitting} appearance="positive">
+          Submit
+        </Button>
+      </div>
+    </form>
+  );
+};
+```
+
+### Navigation Actions
+
+Create navigational button patterns:
+
+```tsx
+// Back/Forward navigation
+<div className="flex justify-between">
+  <Button
+    kind="tertiary"
+    prefixIcon={<ChevronLeftIcon />}
+    onClick={() => router.back()}
+  >
+    Back
+  </Button>
+  <Button
+    suffixIcon={<ChevronRightIcon />}
+    onClick={() => router.push('/next')}
+  >
+    Continue
+  </Button>
+</div>
+
+// Breadcrumb navigation
+<div className="flex items-center gap-1">
+  <Button kind="tertiary" size="s">Home</Button>
+  <ChevronRightIcon className="w-4 h-4 text-gray-400" />
+  <Button kind="tertiary" size="s">Products</Button>
+  <ChevronRightIcon className="w-4 h-4 text-gray-400" />
+  <Button kind="tertiary" size="s" disabled>Current Page</Button>
+</div>
+```
+
+### Confirmation Dialogs
+
+Implement confirmation patterns:
+
+```tsx
+const ConfirmationDialog = ({ onConfirm, onCancel }) => (
+  <div className="p-6 bg-white rounded-lg shadow-lg">
+    <h2 className="text-lg font-semibold mb-4">Confirm Action</h2>
+    <p className="text-gray-600 mb-6">This action cannot be undone.</p>
+    <div className="flex gap-3 justify-end">
+      <Button kind="secondary" onClick={onCancel}>
+        Cancel
+      </Button>
+      <Button kind="primary" appearance="negative" onClick={onConfirm} prefixIcon={<WarningIcon />}>
+        Delete
+      </Button>
+    </div>
+  </div>
+);
+```
+
+### Multi-Step Workflows
+
+Guide users through processes:
+
+```tsx
+const MultiStepWorkflow = ({ currentStep, onNext, onPrevious, onFinish }) => (
+  <div className="flex justify-between items-center">
+    <Button
+      kind="secondary"
+      prefixIcon={<ChevronLeftIcon />}
+      onClick={onPrevious}
+      disabled={currentStep === 1}
+    >
+      Previous
+    </Button>
+
+    <span className="text-sm text-gray-500">Step {currentStep} of 3</span>
+
+    {currentStep < 3 ? (
+      <Button suffixIcon={<ChevronRightIcon />} onClick={onNext}>
+        Next
+      </Button>
+    ) : (
+      <Button appearance="positive" onClick={onFinish} prefixIcon={<CheckIcon />}>
+        Finish
+      </Button>
+    )}
+  </div>
+);
+```
+
+### AI-Powered Features
+
+Highlight artificial intelligence capabilities:
+
+```tsx
+// AI generation button
+<Button
+  kind="primary"
+  appearance="ai"
+  size="l"
+  prefixIcon={<SparklesIcon />}
+  className="mb-4"
+>
+  Generate with AI
+</Button>
+
+// AI suggestion
+<Button
+  kind="secondary"
+  appearance="default"
+  prefixIcon={<LightbulbIcon />}
+  size="s"
+>
+  AI Suggestion
+</Button>
+
+// Smart automation
 <Button
   kind="tertiary"
-  appearance="warning"
-  size="xl"
-  prefixIcon={<IcImport />}
-  suffixIcon={<IcMoreHorizontal />}
-  loading
-  disabled
-  fullWidth
-  className="custom-class"
-  iconClassName="icon-class"
-  aria-label="All props"
+  appearance="default"
+  prefixIcon={<AutomationIcon />}
 >
-  All Props
+  Auto-complete
 </Button>
+```
+
+## Accessibility Features
+
+### Keyboard Navigation
+
+Full keyboard support with proper focus management:
+
+```tsx
+<Button
+  onKeyDown={e => {
+    if (e.key === "Enter" || e.key === " ") {
+      handleAction();
+    }
+  }}
+>
+  Keyboard Accessible
+</Button>
+```
+
+### Screen Reader Support
+
+Proper ARIA attributes and labels:
+
+```tsx
+// Loading state announcement
+<Button
+  loading={isLoading}
+  aria-describedby="loading-description"
+>
+  Submit
+</Button>
+<div id="loading-description" className="sr-only">
+  {isLoading ? "Submitting form, please wait" : ""}
+</div>
+
+// Icon-only buttons
+<Button prefixIcon={<CloseIcon />} aria-label="Close dialog">
+  <span className="sr-only">Close</span>
+</Button>
+
+// Disabled state
+<Button disabled aria-describedby="disabled-reason">
+  Submit
+</Button>
+<div id="disabled-reason" className="sr-only">
+  Form must be completed before submitting
+</div>
+```
+
+### Focus Management
+
+Proper focus indication and management:
+
+```tsx
+// Focus trap in modals
+const Modal = () => {
+  const firstButtonRef = useRef(null);
+
+  useEffect(() => {
+    firstButtonRef.current?.focus();
+  }, []);
+
+  return (
+    <div className="modal">
+      <Button ref={firstButtonRef}>First Action</Button>
+      <Button>Second Action</Button>
+    </div>
+  );
+};
+```
+
+## Theming and Customization
+
+### Theme-Aware Colors
+
+Button automatically adapts to Genesis theme system:
+
+```tsx
+// Falcon theme
+<div className="falcon-theme">
+  <Button>Falcon Primary</Button>
+</div>
+
+// Phoenix theme
+<div className="phoenix-theme">
+  <Button>Phoenix Primary</Button>
+</div>
+
+// Jarvis theme
+<div className="jarvis-theme">
+  <Button>Jarvis Primary</Button>
+</div>
+```
+
+### Custom Styling
+
+Extend button appearance with custom classes:
+
+```tsx
+// Custom colors
+<Button className="bg-purple-500 hover:bg-purple-600 text-white">
+  Custom Purple
+</Button>
+
+// Custom spacing
+<Button className="px-8 py-4">
+  Extra Padding
+</Button>
+
+// Custom border radius
+<Button className="rounded-none">
+  Square Button
+</Button>
+```
+
+### CSS Variables
+
+Leverage Genesis design tokens:
+
+```css
+.custom-button {
+  background-color: var(--gd-primary-50);
+  color: var(--gd-primary-inverse);
+  border-radius: var(--gd-border-radius-button);
+}
+```
+
+## Performance Considerations
+
+### Loading State Optimization
+
+Prevent layout shift during loading transitions:
+
+```tsx
+const OptimizedButton = ({ loading, children, ...props }) => (
+  <Button
+    loading={loading}
+    style={{
+      minWidth: loading ? "auto" : "fit-content",
+      width: loading ? props.width : "auto",
+    }}
+    {...props}
+  >
+    {children}
+  </Button>
+);
+```
+
+### Icon Optimization
+
+Use properly sized icons for better performance:
+
+```tsx
+// Prefer SVG icons over bitmap images
+import { CheckIcon } from "gends";
+
+<Button prefixIcon={<CheckIcon />}>Optimized Icon</Button>;
+
+// Lazy load heavy icons
+const HeavyIcon = lazy(() => import("./HeavyIcon"));
+
+<Button
+  prefixIcon={
+    <Suspense fallback={<Spinner />}>
+      <HeavyIcon />
+    </Suspense>
+  }
+>
+  Lazy Icon
+</Button>;
+```
+
+## Design Tokens Reference
+
+### Color System
+
+| Appearance | Primary Background | Text Color | Border Color | Focus Ring |
+| ---------- | ------------------ | ---------- | ------------ | ---------- |
+| Default    | `#3535F3`          | `#FFFFFF`  | `#E0E0E0`    | `#000093`  |
+| Contrast   | `#FFFFFF`          | `#000093`  | `#E0E0E0`    | `#3535F3`  |
+| Positive   | `#25AB21`          | `#FFFFFF`  | `#E0E0E0`    | `#000093`  |
+| Negative   | `#F50031`          | `#FFFFFF`  | `#E0E0E0`    | `#000093`  |
+| Warning    | `#F06D0F`          | `#FFFFFF`  | `#E0E0E0`    | `#000093`  |
+| AI         | Gradient           | `#FFFFFF`  | None         | `#3535F3`  |
+
+### Typography Scale
+
+| Size | Font Size | Font Weight | Line Height |
+| ---- | --------- | ----------- | ----------- |
+| `xs` | 12px      | 500         | 16px        |
+| `s`  | 14px      | 500         | 20px        |
+| `m`  | 14px      | 500         | 20px        |
+| `l`  | 16px      | 500         | 24px        |
+| `xl` | 24px      | 500         | 32px        |
+
+### Spacing System
+
+| Size | Height | Padding X | Padding Y | Icon Size |
+| ---- | ------ | --------- | --------- | --------- |
+| `xs` | 24px   | 8px       | 4px       | 12px      |
+| `s`  | 32px   | 12px      | 4px       | 14px      |
+| `m`  | 40px   | 16px      | 8px       | 16px      |
+| `l`  | 48px   | 20px      | 12px      | 18px      |
+| `xl` | 64px   | 32px      | 16px      | 24px      |
+
+## Troubleshooting
+
+### Common Issues
+
+**Button not responding to clicks:**
+
+```tsx
+// Check for event propagation issues
+<Button
+  onClick={e => {
+    e.stopPropagation();
+    handleClick();
+  }}
+>
+  Click Me
+</Button>
+```
+
+**Loading state not working:**
+
+```tsx
+// Ensure loading prop is boolean
+<Button loading={Boolean(isLoading)}>Submit</Button>
+```
+
+**Icons not displaying:**
+
+```tsx
+// Verify icon component is valid React element
+<Button prefixIcon={React.isValidElement(icon) ? icon : <DefaultIcon />}>With Icon</Button>
+```
+
+**Focus ring not visible:**
+
+```tsx
+// Ensure focus-visible styles are not overridden
+<Button className="focus-visible:ring-4 focus-visible:ring-offset-0">Focusable</Button>
+```
+
+### Performance Issues
+
+**Slow rendering with many buttons:**
+
+```tsx
+// Use React.memo for static buttons
+const MemoizedButton = React.memo(Button);
+
+// Virtualize large lists of buttons
+import { FixedSizeList } from "react-window";
+```
+
+**Memory leaks with event handlers:**
+
+```tsx
+// Use useCallback for event handlers
+const handleClick = useCallback(() => {
+  // Handler logic
+}, [dependencies]);
+
+<Button onClick={handleClick}>Click</Button>;
+```
+
+## Migration Guide
+
+### From v1.x to v2.x
+
+```tsx
+// OLD v1.x API
+<Button variant="primary" color="blue" size="medium">
+  Old Button
+</Button>
+
+// NEW v2.x API
+<Button kind="primary" appearance="default" size="m">
+  New Button
+</Button>
+```
+
+### Breaking Changes
+
+- `variant` prop renamed to `kind`
+- `color` prop renamed to `appearance`
+- Size values changed: `medium` → `m`, `small` → `s`
+- `loading` prop behavior changed to overlay spinner
+
+## Best Practices
+
+### ✅ Do's
+
+- Use semantic appearances (`positive`, `negative`, `warning`)
+- Provide loading states for async actions
+- Include proper ARIA labels for accessibility
+- Use appropriate sizes for context
+- Group related buttons logically
+- Test keyboard navigation
+- Provide visual feedback for interactions
+
+### ❌ Don'ts
+
+- Don't use multiple primary buttons in same context
+- Don't disable buttons without explanation
+- Don't use tertiary buttons for critical actions
+- Don't override focus styles without alternatives
+- Don't nest buttons inside other buttons
+- Don't use buttons for navigation (use links instead)
+- Don't forget loading states for async operations
+
+## Browser Support
+
+- **Chrome**: Latest 2 versions
+- **Firefox**: Latest 2 versions
+- **Safari**: Latest 2 versions
+- **Edge**: Latest 2 versions
+- **Mobile Safari**: iOS 14+
+- **Chrome Mobile**: Android 8+
+
+## Related Components
+
+- **Input** - Use with buttons for form submissions
+- **Modal** - Buttons for dialog actions and controls
+- **Card** - Action buttons within content cards
+- **Badge** - Status indicators alongside buttons
+- **Navigation** - Menu and routing button patterns

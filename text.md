@@ -1,8 +1,9 @@
 # Text
 
-A flexible typography component that provides consistent desktop-optimized text styles while maintaining accessibility and customization capabilities.
+A flexible typography component that implements a consistent type scale across the application, supporting various text styles from display text to body copy—with semantic HTML rendering and customizable variants.
 
 ## Key Features
+
 - **Comprehensive Style Variants**: 22 predefined desktop-optimized styles for displays, headings, and body text
 - **Semantic HTML Support**: Override default elements using the `as` prop for proper HTML semantics
 - **Style Customization**: Extend or override styles using Tailwind CSS classes
@@ -12,142 +13,226 @@ A flexible typography component that provides consistent desktop-optimized text 
 ## 1. Quick start
 
 ```tsx
-import { Text } from 'gends';
+import { Text } from "gends";
 
-// Default body text
-<Text>Regular paragraph text</Text>
+function Example() {
+  return (
+    <>
+      <Text variant="desktop-display-l">Large Display Text</Text>
+      <Text variant="desktop-heading-m">Medium Heading</Text>
+      <Text variant="desktop-body-m">Regular body text</Text>
+    </>
+  );
+}
+```
 
-// Semantic heading with variant
-<Text variant="desktop-heading-xl" as="h1">Main page heading</Text>
+The `Text` component automatically maps variants to appropriate semantic HTML elements (h1-h5, p, span).
 
-// Prominent body text with custom color
-<Text variant="desktop-body-l-prominent" className="text-brand-primary">
-  Important notice text
+---
+
+## 2. Text Categories
+
+### Display Text
+
+| Variant               | HTML Element | Use Case           |
+| --------------------- | ------------ | ------------------ |
+| `desktop-display-2xl` | h1           | Hero sections      |
+| `desktop-display-xl`  | h1           | Main headlines     |
+| `desktop-display-l`   | h1           | Large headers      |
+| `desktop-display-m`   | h1           | Medium headers     |
+| `desktop-display-s`   | h2           | Section headers    |
+| `desktop-display-xs`  | h2           | Subsection headers |
+| `desktop-display-2xs` | h2           | Minor headers      |
+
+### Headings
+
+| Variant               | HTML Element | Use Case       |
+| --------------------- | ------------ | -------------- |
+| `desktop-heading-2xl` | h2           | Major sections |
+| `desktop-heading-xl`  | h3           | Section titles |
+| `desktop-heading-l`   | h4           | Subsections    |
+| `desktop-heading-m`   | h5           | Minor sections |
+
+### Body Text
+
+| Variant                      | HTML Element | Use Case             |
+| ---------------------------- | ------------ | -------------------- |
+| `desktop-body-2xl-prominent` | p            | Featured content     |
+| `desktop-body-xl-prominent`  | p            | Important paragraphs |
+| `desktop-body-xl`            | p            | Large body text      |
+| `desktop-body-l-prominent`   | p            | Emphasized content   |
+| `desktop-body-l`             | p            | Standard paragraphs  |
+| `desktop-body-m-prominent`   | p            | Medium emphasized    |
+| `desktop-body-m`             | p            | Default body text    |
+| `desktop-body-s-prominent`   | p            | Small emphasized     |
+| `desktop-body-s`             | p            | Small text           |
+| `desktop-body-xs-prominent`  | span         | Tiny emphasized      |
+| `desktop-body-xs`            | span         | Tiny text            |
+
+---
+
+## 3. Semantic HTML
+
+The component automatically maps variants to semantic HTML elements:
+
+```tsx
+// Renders as <h1>
+<Text variant="desktop-display-xl">Title</Text>
+
+// Renders as <p>
+<Text variant="desktop-body-m">Paragraph</Text>
+
+// Renders as <span>
+<Text variant="desktop-body-xs">Small text</Text>
+```
+
+You can override the default element using the `as` prop:
+
+```tsx
+// Force rendering as a different element
+<Text variant="desktop-body-m" as="div">
+  Div element with body text styling
 </Text>
 ```
 
-## 2. Display Variants
+---
+
+## 4. Customization
+
+### Custom Classes
 
 ```tsx
-// Display variants (largest to smallest)
-<Text variant="desktop-display-2xl" as="h1">Display 2XL (64px)</Text>
-<Text variant="desktop-display-xl" as="h1">Display XL (56px)</Text>
-<Text variant="desktop-display-l" as="h2">Display L (48px)</Text>
-<Text variant="desktop-display-m" as="h3">Display M (40px)</Text>
-<Text variant="desktop-display-s" as="h4">Display S (32px)</Text>
-<Text variant="desktop-display-xs" as="h5">Display XS (24px)</Text>
-<Text variant="desktop-display-2xs" as="h6">Display 2XS (20px)</Text>
+<Text variant="desktop-body-m" className="text-blue-500 hover:text-blue-600">
+  Custom styled text
+</Text>
 ```
 
-## 3. Heading Variants
+### HTML Attributes
 
 ```tsx
-// Heading variants (largest to smallest)
-<Text variant="desktop-heading-2xl" as="h1">Heading 2XL (56px)</Text>
-<Text variant="desktop-heading-xl" as="h2">Heading XL (48px)</Text>
-<Text variant="desktop-heading-l" as="h3">Heading L (40px)</Text>
-<Text variant="desktop-heading-m" as="h4">Heading M (32px)</Text>
+<Text
+  variant="desktop-body-m"
+  id="main-content"
+  aria-label="Main content"
+  onClick={() => console.log("clicked")}
+>
+  Interactive text
+</Text>
 ```
 
-## 4. Body Text Variants
+---
+
+## 5. Full prop reference
+
+| Prop        | Type                          | Default            | Description            |
+| ----------- | ----------------------------- | ------------------ | ---------------------- |
+| `variant`   | `TextVariant`                 | `'desktop-body-m'` | Typography variant     |
+| `as`        | `keyof JSX.IntrinsicElements` | Based on variant   | HTML element override  |
+| `className` | `string`                      | -                  | Additional CSS classes |
+| `children`  | `ReactNode`                   | -                  | Text content           |
+
+Plus all standard HTML text element attributes.
+
+---
+
+## 6. Recipes
+
+### Article Layout
 
 ```tsx
-// Body text variants (largest to smallest)
-<Text variant="desktop-body-2xl-prominent">Body 2XL Prominent</Text>
-<Text variant="desktop-body-xl-prominent">Body XL Prominent</Text>
-<Text variant="desktop-body-xl">Body XL</Text>
-<Text variant="desktop-body-l-prominent">Body L Prominent</Text>
-<Text variant="desktop-body-l">Body L</Text>
-<Text variant="desktop-body-m-prominent">Body M Prominent</Text>
-<Text variant="desktop-body-m">Body M (default)</Text>
-<Text variant="desktop-body-s-prominent">Body S Prominent</Text>
-<Text variant="desktop-body-s">Body S</Text>
-<Text variant="desktop-body-xs-prominent">Body XS Prominent</Text>
-<Text variant="desktop-body-xs">Body XS</Text>
+function Article() {
+  return (
+    <article>
+      <Text variant="desktop-display-xl">Article Title</Text>
+
+      <Text variant="desktop-heading-l">Section Heading</Text>
+
+      <Text variant="desktop-body-l">Introduction paragraph with larger text...</Text>
+
+      <Text variant="desktop-body-m">Regular content paragraph...</Text>
+
+      <Text variant="desktop-body-s">Small print information...</Text>
+    </article>
+  );
+}
 ```
 
-## 5. Semantic HTML Elements
+### Card Component
 
 ```tsx
-// Different HTML elements for semantic markup
-<Text as="p">Paragraph text (default)</Text>
-<Text as="span">Span text</Text>
-<Text as="h1">Heading 1</Text>
-<Text as="h2">Heading 2</Text>
-<Text as="h3">Heading 3</Text>
-<Text as="h4">Heading 4</Text>
-<Text as="h5">Heading 5</Text>
-<Text as="h6">Heading 6</Text>
-<Text as="div">Div text</Text>
-<Text as="label">Label text</Text>
+function Card() {
+  return (
+    <div className="card">
+      <Text variant="desktop-heading-m">Card Title</Text>
+
+      <Text variant="desktop-body-m-prominent">Featured content or summary...</Text>
+
+      <Text variant="desktop-body-s">Additional details...</Text>
+    </div>
+  );
+}
 ```
 
-## 6. Customization
+### Form Labels
 
 ```tsx
-// Custom styling with Tailwind classes
-<Text className="text-brand-primary">Custom color</Text>
-<Text className="font-bold">Bold text</Text>
-<Text className="italic">Italic text</Text>
-<Text className="underline">Underlined text</Text>
-<Text className="text-center">Centered text</Text>
-<Text className="truncate">Truncated text that's too long...</Text>
+function FormField() {
+  return (
+    <div className="field">
+      <Text variant="desktop-body-s-prominent" as="label">
+        Field Label
+      </Text>
+
+      <input type="text" />
+
+      <Text variant="desktop-body-xs" className="text-gray-500">
+        Helper text
+      </Text>
+    </div>
+  );
+}
 ```
 
-## 7. Full prop reference
+---
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `variant` | `TextVariant` | `'desktop-body-m'` | Predefined text style variant |
-| `as` | `keyof JSX.IntrinsicElements` | `'p'` | HTML element to render |
-| `className` | `string` | – | Additional Tailwind classes |
-| `children` | `React.ReactNode` | – | Text content |
+## 7. Accessibility considerations
 
-### TextVariant type
+- Uses semantic HTML elements by default
+- Maintains proper heading hierarchy
+- Supports ARIA attributes
+- Preserves text scaling
+- Screen reader friendly
 
 ```tsx
-type TextVariant =
-  | 'desktop-display-2xl'
-  | 'desktop-display-xl'
-  | 'desktop-display-l'
-  | 'desktop-display-m'
-  | 'desktop-display-s'
-  | 'desktop-display-xs'
-  | 'desktop-display-2xs'
-  | 'desktop-heading-2xl'
-  | 'desktop-heading-xl'
-  | 'desktop-heading-l'
-  | 'desktop-heading-m'
-  | 'desktop-body-2xl-prominent'
-  | 'desktop-body-xl-prominent'
-  | 'desktop-body-xl'
-  | 'desktop-body-l-prominent'
-  | 'desktop-body-l'
-  | 'desktop-body-m-prominent'
-  | 'desktop-body-m'
-  | 'desktop-body-s-prominent'
-  | 'desktop-body-s'
-  | 'desktop-body-xs-prominent'
-  | 'desktop-body-xs';
+// Proper heading hierarchy
+<Text variant="desktop-display-xl">Page Title</Text>
+<Text variant="desktop-heading-l">Section Title</Text>
+<Text variant="desktop-heading-m">Subsection Title</Text>
 ```
 
-## 8. Best Practices
+---
 
-1. **Maintain Heading Hierarchy**
-   ```tsx
-   <Text variant="desktop-heading-xl" as="h1">Page Title</Text>
-   <Text variant="desktop-heading-l" as="h2">Section Title</Text>
-   <Text variant="desktop-heading-m" as="h3">Subsection Title</Text>
-   ```
+## 8. Design patterns
 
-2. **Use Semantic Elements**
-   ```tsx
-   <Text as="label" variant="desktop-body-s">Form Label</Text>
-   <Text as="p" variant="desktop-body-m">Paragraph</Text>
-   ```
+### Typography Hierarchy
 
-3. **Prominent Variants for Emphasis**
-   ```tsx
-   <Text variant="desktop-body-l">Regular text</Text>
-   <Text variant="desktop-body-l-prominent">Important text</Text>
-   ```
+- Use appropriate variants for content hierarchy
+- Maintain consistent spacing between text elements
+- Follow heading levels sequentially
+- Use prominent variants for emphasis
+
+### Content Organization
+
+- Use display variants for main titles
+- Apply heading variants for sections
+- Utilize body variants for content
+- Implement consistent spacing
+
+### Responsive Patterns
+
+- Consider readability across devices
+- Adjust text sizes responsively
+- Maintain proper contrast
+- Ensure proper line lengths
+
+---

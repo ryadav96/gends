@@ -1,294 +1,264 @@
-# IconButton
+# Icon Button Component
 
-A versatile icon-only button component that supports multiple types, appearances, sizes, and states—perfect for compact UI actions and toolbar buttons.
+## Overview
 
----
+The Icon Button component is a versatile and accessible button component built with Genesis Design System tokens. It provides a comprehensive set of variants for different use cases, including multiple sizes, appearances, types, and states. The component is designed for both standalone icon actions and as part of larger UI elements, with complete accessibility support and extensive customization options.
 
-## 1. Quick start
+## Component API
 
-```tsx
+### IconButton Props
+
+| Prop         | Type                                                         | Default     | Description                                   |
+| ------------ | ------------------------------------------------------------ | ----------- | --------------------------------------------- |
+| size         | `"xs" \| "sm" \| "md" \| "lg" \| "xl"`                       | `"md"`      | Size of the icon button                       |
+| appearance   | `"default" \| "positive" \| "negative" \| "warning" \| "ai"` | `"default"` | Visual style of the button                    |
+| type         | `"primary" \| "secondary" \| "tertiary"`                     | `"primary"` | Type of button                                |
+| inverse      | `boolean`                                                    | `false`     | Whether to use inverse styling                |
+| selected     | `boolean`                                                    | `false`     | Whether the button is in selected state       |
+| icon         | `ReactNode`                                                  | Required    | Icon to display                               |
+| onClick      | `(ev: MouseEvent<HTMLButtonElement>) => void`                | `() => {}`  | Click handler                                 |
+| disabled     | `boolean`                                                    | `false`     | Whether the button is disabled                |
+| classNames   | `{ button?: string; icon?: string; container?: string; }`    | `{}`        | Custom class names for styling                |
+| counterbadge | `boolean`                                                    | `false`     | Whether to show a counter badge               |
+| id           | `string`                                                     | `""`        | Unique identifier for the button              |
+| style        | `React.CSSProperties`                                        | `{}`        | Custom inline styles                          |
+| buttonProps  | `ButtonProps`                                                | `{}`        | Additional props to pass to underlying Button |
+
+### Import Statement
+
+```typescript
 import { IconButton } from "gends";
-import { IcClose } from "../../Icons/Icons";
-
-function Example() {
-  return (
-    <IconButton
-      type="primary"
-      appearance="default"
-      size="md"
-      icon={<IcClose />}
-      onClick={() => console.log("Clicked")}
-    />
-  );
-}
 ```
 
----
+## Basic Usage
 
-## 2. Sizes
-
-| size | Dimensions | Icon size | Recommended use       |
-| ---- | ---------- | --------- | --------------------- |
-| `xs` | 16px       | 12px      | Ultra compact actions |
-| `sm` | 20px       | 16px      | Compact toolbars      |
-| `md` | 24px       | 20px      | Standard usage        |
-| `lg` | 32px       | 24px      | Prominent actions     |
-| `xl` | 40px       | 28px      | Hero/featured actions |
+### Default Icon Button
 
 ```tsx
-<IconButton size="xs" icon={<IcClose />} />
-<IconButton size="sm" icon={<IcClose />} />
-<IconButton size="md" icon={<IcClose />} />
-<IconButton size="lg" icon={<IcClose />} />
-<IconButton size="xl" icon={<IcClose />} />
+import { IcClose } from "gends";
+
+<IconButton icon={<IcClose />} />;
 ```
 
----
-
-## 3. Button types
-
-The component supports three distinct button styles:
-
-| type        | Description                          | Use case              |
-| ----------- | ------------------------------------ | --------------------- |
-| `primary`   | Filled background with solid colors  | Main actions, CTAs    |
-| `secondary` | Outlined style with transparent fill | Secondary actions     |
-| `tertiary`  | Text-only with optional background   | Subtle actions, tools |
+### With Different Sizes
 
 ```tsx
-<IconButton type="primary" icon={<IcClose />} />
-<IconButton type="secondary" icon={<IcClose />} />
-<IconButton type="tertiary" icon={<IcClose />} />
-```
-
----
-
-## 4. Appearance variants
-
-| appearance | Primary colors       | Secondary colors    | Tertiary colors | Use case            |
-| ---------- | -------------------- | ------------------- | --------------- | ------------------- |
-| `default`  | Blue backgrounds     | Blue outline/text   | Blue text       | Standard actions    |
-| `positive` | Green backgrounds    | Green outline/text  | Green text      | Success actions     |
-| `negative` | Red backgrounds      | Red outline/text    | Red text        | Destructive actions |
-| `warning`  | Orange backgrounds   | Orange outline/text | Orange text     | Warning actions     |
-| `ai`       | Gradient (teal/blue) | Gradient outline    | Gradient icon   | AI-powered features |
-
-```tsx
-<IconButton appearance="default" icon={<IcClose />} />
-<IconButton appearance="positive" icon={<IcClose />} />
-<IconButton appearance="negative" icon={<IcClose />} />
-<IconButton appearance="warning" icon={<IcClose />} />
-<IconButton appearance="ai" icon={<IcClose />} />
-```
-
----
-
-## 5. States
-
-```tsx
-// Selected state
-<IconButton selected={true} icon={<IcClose />} />
-
-// Disabled state
-<IconButton disabled={true} icon={<IcClose />} />
-
-// Inverse colors (for dark backgrounds)
-<IconButton inverse={true} icon={<IcClose />} />
-```
-
----
-
-## 6. AI appearance special features
-
-The AI appearance has special behavior and sizing:
-
-```tsx
-// AI appearance automatically uses gradient icons
-<IconButton appearance="ai" type="secondary" size="md" />
-
-// AI buttons have larger dimensions for better visual impact
-<IconButton appearance="ai" type="primary" size="lg" />
-```
-
----
-
-## 7. Custom styling
-
-```tsx
-// Custom button classes
-<IconButton
-  icon={<IcClose />}
-  classNames={{
-    button: "custom-button-class",
-    icon: "custom-icon-class",
-    container: "custom-container-class"
-  }}
-/>
-
-// Custom styles
-<IconButton
-  icon={<IcClose />}
-  style={{ margin: "10px" }}
-/>
-```
-
----
-
-## 8. Full prop reference
-
-### Basic Props
-
-| Prop         | Type                                                         | Default     | Description                      |
-| ------------ | ------------------------------------------------------------ | ----------- | -------------------------------- |
-| `size`       | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'`                       | `'md'`      | Button size affecting dimensions |
-| `type`       | `'primary' \| 'secondary' \| 'tertiary'`                     | `'primary'` | Button style variant             |
-| `appearance` | `'default' \| 'positive' \| 'negative' \| 'warning' \| 'ai'` | `'default'` | Color scheme variant             |
-| `icon`       | `ReactNode`                                                  | -           | Icon to display (required)       |
-
-### States
-
-| Prop       | Type      | Default | Description                             |
-| ---------- | --------- | ------- | --------------------------------------- |
-| `selected` | `boolean` | `false` | Show selected state styling             |
-| `disabled` | `boolean` | `false` | Disable button interactions             |
-| `inverse`  | `boolean` | `false` | Use inverse colors for dark backgrounds |
-
-### Events & Styling
-
-| Prop         | Type                                                     | Description         |
-| ------------ | -------------------------------------------------------- | ------------------- |
-| `onClick`    | `(ev: MouseEvent<HTMLButtonElement>) => void`            | Click event handler |
-| `classNames` | `{ button?: string; icon?: string; container?: string }` | Custom CSS classes  |
-| `style`      | `React.CSSProperties`                                    | Inline styles       |
-| `id`         | `string`                                                 | Element ID          |
-
-### Advanced
-
-| Prop           | Type          | Description                       |
-| -------------- | ------------- | --------------------------------- |
-| `buttonProps`  | `ButtonProps` | Props passed to underlying Button |
-| `counterbadge` | `boolean`     | Show counter badge (deprecated)   |
-| `iconName`     | `string`      | Icon name (deprecated)            |
-
----
-
-## 9. Recipes
-
-### Close button for modals
-
-```tsx
-<IconButton
-  type="tertiary"
-  appearance="default"
-  size="sm"
-  icon={<IcClose />}
-  onClick={handleClose}
-/>
-```
-
-### Delete action button
-
-```tsx
-<IconButton
-  type="primary"
-  appearance="negative"
-  size="md"
-  icon={<IcTrash />}
-  onClick={handleDelete}
-/>
-```
-
-### AI feature button
-
-```tsx
-<IconButton type="secondary" appearance="ai" size="lg" onClick={handleAIAction} />
-```
-
-### Toolbar button with selected state
-
-```tsx
-<IconButton
-  type="secondary"
-  appearance="default"
-  size="md"
-  icon={<IcBold />}
-  selected={isBold}
-  onClick={toggleBold}
-/>
-```
-
-### Inverse button for dark backgrounds
-
-```tsx
-<div className="bg-gray-900 p-4">
-  <IconButton type="primary" appearance="default" size="md" icon={<IcSettings />} inverse={true} />
+<div className="flex items-end gap-4">
+  <IconButton size="xs" icon={<IcClose />} />
+  <IconButton size="sm" icon={<IcClose />} />
+  <IconButton size="md" icon={<IcClose />} />
+  <IconButton size="lg" icon={<IcClose />} />
+  <IconButton size="xl" icon={<IcClose />} />
 </div>
 ```
 
-### Custom styled button
+### With Different Types
 
 ```tsx
-<IconButton
-  icon={<IcHeart />}
-  classNames={{
-    button: "hover:scale-110 transition-transform",
-    icon: "text-red-500",
-  }}
-  style={{ borderRadius: "8px" }}
-/>
+<div className="flex gap-4">
+  <IconButton type="primary" icon={<IcClose />} />
+  <IconButton type="secondary" icon={<IcClose />} />
+  <IconButton type="tertiary" icon={<IcClose />} />
+</div>
 ```
 
----
+## Advanced Features
 
-## 10. Accessibility
-
-The IconButton component includes several accessibility features:
-
-- Proper ARIA attributes for screen readers
-- Focus management with visible focus rings
-- Keyboard navigation support (Enter and Space keys)
-- Disabled state prevents interaction and keyboard focus
+### Appearance Variants
 
 ```tsx
-<IconButton
-  icon={<IcClose />}
-  onClick={handleClose}
-  disabled={!canClose}
-  aria-label="Close dialog"
-/>
+<div className="flex gap-4">
+  <IconButton appearance="default" icon={<IcClose />} />
+  <IconButton appearance="positive" icon={<IcClose />} />
+  <IconButton appearance="negative" icon={<IcClose />} />
+  <IconButton appearance="warning" icon={<IcClose />} />
+  <IconButton appearance="ai" icon={<IcClose />} />
+</div>
 ```
 
----
+### Inverse Styling
 
-## 11. Design Tokens
+```tsx
+<div className="flex gap-4 p-4 bg-gray-800">
+  <IconButton appearance="default" inverse icon={<IcClose />} />
+  <IconButton appearance="positive" inverse icon={<IcClose />} />
+  <IconButton appearance="negative" inverse icon={<IcClose />} />
+  <IconButton appearance="warning" inverse icon={<IcClose />} />
+</div>
+```
 
-The IconButton component uses the following design system tokens:
+### Selected State
 
-**Sizing:**
+```tsx
+<div className="flex gap-4">
+  <IconButton selected appearance="default" icon={<IcClose />} />
+  <IconButton selected appearance="positive" icon={<IcClose />} />
+  <IconButton selected appearance="negative" icon={<IcClose />} />
+  <IconButton selected appearance="warning" icon={<IcClose />} />
+</div>
+```
 
-- Button dimensions: `16px`, `20px`, `24px`, `32px`, `40px`
-- Icon sizes: `12px`, `16px`, `20px`, `24px`, `28px`
-- Border radius: `rounded-full` (fully rounded)
+### With Counter Badge
+
+```tsx
+<IconButton counterbadge icon={<IcClose />} />
+```
+
+## Real-World Usage Examples
+
+### Navigation Actions
+
+```tsx
+const NavigationActions = () => {
+  return (
+    <div className="flex gap-2">
+      <IconButton type="tertiary" icon={<IcBack />} onClick={() => handleBack()} />
+      <IconButton type="tertiary" icon={<IcForward />} onClick={() => handleForward()} />
+      <IconButton type="tertiary" icon={<IcRefresh />} onClick={() => handleRefresh()} />
+    </div>
+  );
+};
+```
+
+### Form Actions
+
+```tsx
+const FormActions = () => {
+  return (
+    <div className="flex gap-2">
+      <IconButton
+        type="secondary"
+        appearance="negative"
+        icon={<IcDelete />}
+        onClick={() => handleDelete()}
+      />
+      <IconButton
+        type="primary"
+        appearance="positive"
+        icon={<IcSave />}
+        onClick={() => handleSave()}
+      />
+    </div>
+  );
+};
+```
+
+### AI Feature Toggle
+
+```tsx
+const AIFeatureToggle = () => {
+  const [isEnabled, setIsEnabled] = React.useState(false);
+
+  return (
+    <IconButton
+      type="secondary"
+      appearance="ai"
+      selected={isEnabled}
+      icon={<IcAiStar />}
+      onClick={() => setIsEnabled(!isEnabled)}
+    />
+  );
+};
+```
+
+## Accessibility Features
+
+### Keyboard Navigation
+
+- **Tab Navigation**: Focus management through interactive elements
+- **Enter/Space**: Activate focused button
+- **Focus Management**: Clear focus indicators
+
+### Screen Reader Support
+
+- **ARIA Attributes**: Proper roles and states
+- **Icon Labels**: Descriptive labels for screen readers
+- **State Announcements**: Clear state changes
+
+### Visual Accessibility
+
+- **Focus Indicators**: Clear focus states
+- **Color Contrast**: Meets WCAG 2.1 contrast requirements
+- **Size Variants**: Multiple size options for different needs
+
+## Design System Integration
+
+### Genesis Design Tokens
 
 **Colors:**
 
-- Primary: `#3535F3` (blue) family
-- Success: `#25AB21` (green) family
-- Error: `#F50031` (red) family
-- Warning: `#F06D0F` (orange) family
-- AI gradient: `#1ECCB0` to `#3535F3`
+- Primary: `var(--gd-primary-50)`, `var(--gd-primary-60)`
+- Success: `var(--gd-feedback-success-50)`, `var(--gd-feedback-success-80)`
+- Error: `var(--gd-feedback-error-50)`, `var(--gd-feedback-error-80)`
+- Warning: `var(--gd-feedback-warning-50)`, `var(--gd-feedback-warning-80)`
 
-**Focus rings:**
+**Spacing:**
 
-- `ring-[4px]` with color matching appearance
-- `focus-visible:ring-offset-0`
+- `gd-12`: Extra small size
+- `gd-16`: Small size
+- `gd-20`: Medium size
+- `gd-24`: Large size
+- `gd-32`: Extra large size
 
----
+**Typography:**
 
-Consider using IconButton with:
+- Icon sizes match button sizes
+- Consistent with Genesis Design System scale
 
-- **Tooltip** — For action descriptions
-- **Modal** — For close actions
-- **Toolbar** — For tool actions
-- **Card** — For quick actions
-- **Navigation** — For menu toggles
+**Border Radius:**
+
+- `rounded-gd-8`: Standard border radius
+- `rounded-gd-16`: Large border radius
+
+## Best Practices
+
+### Performance
+
+- Use appropriate icon sizes
+- Optimize icon rendering
+- Handle state changes efficiently
+
+### User Experience
+
+- Choose appropriate size for context
+- Use consistent iconography
+- Provide clear visual feedback
+
+### Integration
+
+- Follow design system guidelines
+- Maintain consistent spacing
+- Consider mobile responsiveness
+
+## Troubleshooting
+
+### Common Issues
+
+**Icon Sizing:**
+
+- Verify icon component size
+- Check container dimensions
+- Ensure proper scaling
+
+**State Management:**
+
+- Handle disabled state properly
+- Manage selected state
+- Control inverse styling
+
+**Styling Conflicts:**
+
+- Check custom class names
+- Verify style overrides
+- Review button props
+
+### Migration Notes
+
+**From Previous Versions:**
+
+- Update import paths
+- Review prop changes
+- Test all variants
+- Verify accessibility
+
+Remember: The Icon Button component provides a flexible and accessible way to implement icon-based actions. Choose the appropriate configuration based on your specific use case and requirements.
