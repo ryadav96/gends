@@ -1,355 +1,355 @@
-# FormNavigation
+# Form Navigation Component
 
-A navigation component that provides synchronized scrolling between a sidebar navigation menu and form sections, with automatic active state management based on viewport intersection.
+## Overview
 
----
+The Form Navigation component is a sophisticated and accessible form navigation system built with Genesis Design System tokens. It provides a sticky sidebar navigation with smooth scrolling between form sections, automatic section tracking, and comprehensive keyboard navigation. The component is designed for multi-step forms, long-form content, and complex data entry scenarios with complete accessibility support.
 
-## 1. Quick start
+## Component API
+
+### FormNav Props
+
+| Prop          | Type                | Default  | Description                                        |
+| ------------- | ------------------- | -------- | -------------------------------------------------- |
+| navTitles     | `string[]`          | Required | Array of navigation titles for each section        |
+| children      | `React.ReactNode[]` | Required | Array of form sections/content to be displayed     |
+| viewThreshold | `number`            | `0.5`    | Intersection threshold for section detection (0-1) |
+
+### Import Statement
+
+```typescript
+import { FormNav } from "gends";
+```
+
+## Basic Usage
+
+### Multi-Step Form
+
+The default implementation with three form sections and navigation.
 
 ```tsx
-import { FormNavigation } from "gends";
+<FormNav navTitles={["Personal Information", "Contact Details", "Additional Information"]}>
+  {[
+    // Section 1: Personal Information
+    <div key="personal" className="cards">
+      <Card title="Personal Information">
+        <Input label="Full Name" placeholder="Enter your full name" required />
+        <div className="grid grid-cols-2 gap-4">
+          <Input label="Date of Birth" type="date" />
+          <Input label="Gender" placeholder="Select gender" />
+        </div>
+        <TextArea label="Brief Bio" placeholder="Tell us about yourself..." rows={4} />
+        <div className="flex justify-end mt-4">
+          <Button>Next</Button>
+        </div>
+      </Card>
+    </div>,
 
-function Example() {
-  const sections = ["Personal Info", "Contact Details", "Preferences"];
+    // Section 2: Contact Details
+    <div key="contact" className="cards">
+      <Card title="Contact Details">
+        <Input label="Email Address" placeholder="Enter your email" type="email" required />
+        <Input label="Phone Number" placeholder="Enter your phone number" />
+        <div className="grid grid-cols-2 gap-4">
+          <Input label="Country" placeholder="Select country" />
+          <Input label="City" placeholder="Enter city" />
+        </div>
+        <Input label="Address" placeholder="Enter your address" />
+        <div className="flex justify-between mt-4">
+          <Button kind="secondary">Previous</Button>
+          <Button>Next</Button>
+        </div>
+      </Card>
+    </div>,
+
+    // Section 3: Additional Information
+    <div key="additional" className="cards">
+      <Card title="Additional Information">
+        <Input label="Occupation" placeholder="Enter your occupation" />
+        <Input label="Company" placeholder="Enter company name" />
+        <div className="grid grid-cols-2 gap-4">
+          <Input label="Years of Experience" type="number" min={0} />
+          <Input label="Skills" placeholder="Enter your skills" />
+        </div>
+        <TextArea label="Additional Notes" placeholder="Any additional information..." rows={4} />
+        <div className="flex justify-between mt-4">
+          <Button kind="secondary">Previous</Button>
+          <Button kind="primary">Submit</Button>
+        </div>
+      </Card>
+    </div>,
+  ]}
+</FormNav>
+```
+
+## Advanced Features
+
+### Form Validation Integration
+
+Integration with form validation and state management.
+
+```tsx
+const FormWithValidation = () => {
+  const [formData, setFormData] = React.useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+
+  const handleChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
 
   return (
-    <FormNavigation navTitles={sections} viewThreshold={0.5}>
-      <PersonalInfoSection />
-      <ContactDetailsSection />
-      <PreferencesSection />
-    </FormNavigation>
+    <FormNav navTitles={["Basic Details", "Contact Info", "Review & Submit"]}>
+      {[
+        // Section 1: Basic Details
+        <div key="basic" className="cards">
+          <Card title="Basic Details">
+            <Input
+              label="Full Name"
+              placeholder="Enter your full name"
+              required
+              value={formData.name}
+              onValueChange={val => handleChange("name", val.toString())}
+              validationState={formData.name ? "success" : "error"}
+              validationMessage={formData.name ? "Looks good!" : "Name is required"}
+            />
+            <div className="flex justify-end mt-4">
+              <Button>Continue</Button>
+            </div>
+          </Card>
+        </div>,
+
+        // Section 2: Contact Info
+        <div key="contact" className="cards">
+          <Card title="Contact Information">
+            <Input
+              label="Email Address"
+              type="email"
+              placeholder="Enter your email"
+              required
+              value={formData.email}
+              onValueChange={val => handleChange("email", val.toString())}
+              validationState={formData.email.includes("@") ? "success" : "error"}
+              validationMessage={
+                formData.email.includes("@") ? "Valid email" : "Please enter a valid email"
+              }
+            />
+            <div className="flex justify-between mt-4">
+              <Button kind="secondary">Back</Button>
+              <Button>Continue</Button>
+            </div>
+          </Card>
+        </div>,
+      ]}
+    </FormNav>
   );
-}
-```
-
----
-
-## 2. Navigation behavior
-
-The FormNavigation component provides intelligent scroll synchronization:
-
-| behavior          | Description                       | Trigger                 |
-| ----------------- | --------------------------------- | ----------------------- |
-| Auto-detection    | Active section updates on scroll  | Viewport intersection   |
-| Manual navigation | Click to jump to section          | Navigation item click   |
-| Smooth scrolling  | Animated scroll transitions       | Programmatic navigation |
-| Threshold-based   | Configurable visibility threshold | `viewThreshold` prop    |
-
-```tsx
-// Basic navigation with default threshold
-<FormNavigation navTitles={["Section 1", "Section 2", "Section 3"]}>
-  <div>Section 1 Content</div>
-  <div>Section 2 Content</div>
-  <div>Section 3 Content</div>
-</FormNavigation>
-
-// Custom visibility threshold
-<FormNavigation navTitles={sections} viewThreshold={0.8}>
-  {sectionComponents}
-</FormNavigation>
-```
-
----
-
-## 3. Layout structure
-
-The component provides a fixed sidebar navigation with scrollable content:
-
-| area      | Properties                      | Description                |
-| --------- | ------------------------------- | -------------------------- |
-| Container | 1136px width, centered, gap-24  | Main layout wrapper        |
-| Sidebar   | 298px width, sticky positioning | Navigation menu (fixed)    |
-| Content   | Flexible width, scrollable      | Form sections (scrollable) |
-
-```tsx
-// Standard layout
-<FormNavigation navTitles={navTitles}>
-  <FormSection1 />
-  <FormSection2 />
-  <FormSection3 />
-</FormNavigation>
-```
-
----
-
-## 4. Navigation states
-
-| state      | Description                 | Visual treatment            |
-| ---------- | --------------------------- | --------------------------- |
-| `active`   | Currently visible section   | Blue background, bold text  |
-| `inactive` | Non-active navigation items | Default text, no background |
-
-```tsx
-// Active state styling automatically applied based on scroll position
-<FormNavigation navTitles={["Overview", "Details", "Summary"]}>
-  {/* Active section gets bg-color-primary-20 automatically */}
-  <OverviewSection />
-  <DetailsSection />
-  <SummarySection />
-</FormNavigation>
-```
-
----
-
-## 5. Scroll configuration
-
-```tsx
-// Custom threshold for section activation
-<FormNavigation
-  navTitles={sections}
-  viewThreshold={0.3} // Section becomes active when 30% visible
->
-  {sectionComponents}
-</FormNavigation>
-
-// Multiple sections with different content heights
-<FormNavigation navTitles={["Short Section", "Long Form", "Quick Summary"]}>
-  <div className="h-64">Short content</div>
-  <div className="h-screen">Long form with many fields</div>
-  <div className="h-32">Brief summary</div>
-</FormNavigation>
-```
-
----
-
-## 6. Advanced features
-
-The component includes intersection observer optimization and smooth transitions:
-
-```tsx
-// Debounced scroll handling for performance
-<FormNavigation navTitles={navTitles} viewThreshold={0.5}>
-  {/* Automatic debouncing and smooth transitions */}
-  <ComplexFormSection />
-  <AnotherFormSection />
-</FormNavigation>;
-
-// Manual scroll control (internal implementation)
-const handleSectionClick = index => {
-  // Smooth scroll to section with temporary observer disable
-  contentRefs.current[index].scrollIntoView({
-    behavior: "smooth",
-    block: "start",
-  });
 };
 ```
 
----
+### Custom Section Tracking
 
-## 7. Full prop reference
-
-### Basic Props
-
-| Prop            | Type          | Description                         |
-| --------------- | ------------- | ----------------------------------- |
-| `navTitles`     | `string[]`    | Array of navigation section titles  |
-| `children`      | `ReactNode[]` | Array of section components         |
-| `viewThreshold` | `number`      | Intersection threshold (0.0 to 1.0) |
-
-### Navigation Titles
-
-| Property    | Type     | Description                        |
-| ----------- | -------- | ---------------------------------- |
-| Array items | `string` | Section titles for navigation menu |
-
-### Children Components
-
-| Property    | Type        | Description                         |
-| ----------- | ----------- | ----------------------------------- |
-| Array items | `ReactNode` | Content components for each section |
-
-### Threshold Configuration
-
-| Value range | Description                          |
-| ----------- | ------------------------------------ |
-| `0.0`       | Section active when any part visible |
-| `0.5`       | Section active when 50% visible      |
-| `1.0`       | Section active when fully visible    |
-
----
-
-## 8. Recipes
-
-### Basic form navigation
+Adjusting the intersection threshold for section detection.
 
 ```tsx
-const formSections = [
-  "Personal Information",
-  "Address Details",
-  "Contact Information",
-  "Preferences",
-];
-
-<FormNavigation navTitles={formSections} viewThreshold={0.5}>
-  <PersonalInfoForm />
-  <AddressForm />
-  <ContactForm />
-  <PreferencesForm />
-</FormNavigation>;
+<FormNav
+  navTitles={["Section 1", "Section 2", "Section 3"]}
+  viewThreshold={0.75} // More strict section detection
+>
+  {sections}
+</FormNav>
 ```
 
-### Multi-step wizard navigation
+## Real-World Usage Examples
+
+### Registration Form
 
 ```tsx
-const wizardSteps = ["Account Setup", "Company Details", "Billing Information", "Review & Submit"];
+const RegistrationForm = () => {
+  return (
+    <FormNav navTitles={["Account Setup", "Personal Details", "Preferences", "Confirmation"]}>
+      {[
+        // Account Setup Section
+        <div key="account" className="cards">
+          <Card title="Create Your Account">
+            <Input label="Username" placeholder="Choose a username" required />
+            <Input label="Password" type="password" placeholder="Create a password" required />
+            <Input
+              label="Confirm Password"
+              type="password"
+              placeholder="Confirm your password"
+              required
+            />
+            <div className="flex justify-end mt-4">
+              <Button>Next</Button>
+            </div>
+          </Card>
+        </div>,
 
-<FormNavigation navTitles={wizardSteps} viewThreshold={0.6}>
-  <AccountSetupStep />
-  <CompanyDetailsStep />
-  <BillingStep />
-  <ReviewStep />
-</FormNavigation>;
+        // Personal Details Section
+        <div key="personal" className="cards">
+          <Card title="Your Information">
+            <Input label="Full Name" placeholder="Enter your full name" required />
+            <Input label="Date of Birth" type="date" required />
+            <div className="grid grid-cols-2 gap-4">
+              <Input label="Country" placeholder="Select your country" required />
+              <Input label="Phone Number" placeholder="Enter your phone number" />
+            </div>
+            <div className="flex justify-between mt-4">
+              <Button kind="secondary">Back</Button>
+              <Button>Next</Button>
+            </div>
+          </Card>
+        </div>,
+      ]}
+    </FormNav>
+  );
+};
 ```
 
-### Settings page navigation
+### Settings Configuration
 
 ```tsx
-const settingsCategories = [
-  "General Settings",
-  "Security & Privacy",
-  "Notifications",
-  "Integrations",
-  "Advanced Options",
-];
+const SettingsForm = () => {
+  return (
+    <FormNav
+      navTitles={[
+        "General Settings",
+        "Notification Preferences",
+        "Privacy Settings",
+        "Advanced Options",
+      ]}
+    >
+      {[
+        // General Settings Section
+        <div key="general" className="cards">
+          <Card title="General Settings">
+            <Input label="Display Name" placeholder="Enter display name" />
+            <Input label="Language" placeholder="Select language" />
+            <Input label="Time Zone" placeholder="Select time zone" />
+            <div className="flex justify-end mt-4">
+              <Button>Save Changes</Button>
+            </div>
+          </Card>
+        </div>,
 
-<FormNavigation navTitles={settingsCategories} viewThreshold={0.4}>
-  <GeneralSettings />
-  <SecuritySettings />
-  <NotificationSettings />
-  <IntegrationsSettings />
-  <AdvancedSettings />
-</FormNavigation>;
+        // Notification Preferences Section
+        <div key="notifications" className="cards">
+          <Card title="Notification Settings">
+            <div className="space-y-4">
+              <Toggle label="Email Notifications" description="Receive email updates" />
+              <Toggle label="Push Notifications" description="Receive push notifications" />
+              <Toggle label="SMS Notifications" description="Receive SMS updates" />
+            </div>
+            <div className="flex justify-end mt-4">
+              <Button>Save Preferences</Button>
+            </div>
+          </Card>
+        </div>,
+      ]}
+    </FormNav>
+  );
+};
 ```
 
-### Documentation navigation
+## Accessibility Features
 
-```tsx
-const docSections = [
-  "Getting Started",
-  "API Reference",
-  "Examples",
-  "Best Practices",
-  "Troubleshooting",
-];
+### Keyboard Navigation
 
-<FormNavigation navTitles={docSections} viewThreshold={0.3}>
-  <GettingStartedDocs />
-  <ApiReferenceDocs />
-  <ExamplesDocs />
-  <BestPracticesDocs />
-  <TroubleshootingDocs />
-</FormNavigation>;
-```
+- **Tab Navigation**: Focus management through navigation items and form fields
+- **Arrow Keys**: Navigate between sections
+- **Enter/Space**: Activate focused navigation item
+- **Focus Management**: Maintains focus within active section
 
-### Variable content heights
+### Screen Reader Support
 
-```tsx
-const mixedSections = [
-  "Quick Overview", // Short section
-  "Detailed Configuration", // Long section
-  "Final Steps", // Medium section
-];
+- **ARIA Attributes**: Proper roles and states for navigation and sections
+- **Live Regions**: Announcements for section changes
+- **Focus Management**: Maintains focus within active section
 
-<FormNavigation navTitles={mixedSections} viewThreshold={0.5}>
-  <div className="h-48 p-4">Brief overview content</div>
-  <div className="min-h-screen p-4">
-    {/* Long form with many fields */}
-    <DetailedConfigurationForm />
-  </div>
-  <div className="h-96 p-4">Final steps content</div>
-</FormNavigation>;
-```
+### Visual Accessibility
 
-### Custom styled navigation
+- **Focus Indicators**: Clear focus states for all interactive elements
+- **Color Contrast**: Meets WCAG 2.1 contrast requirements
+- **Text Scaling**: Supports text size adjustments
 
-```tsx
-<div className="custom-navigation-wrapper">
-  <FormNavigation navTitles={sections} viewThreshold={0.5}>
-    <div className="bg-white rounded-lg shadow p-6">
-      <SectionOne />
-    </div>
-    <div className="bg-gray-50 rounded-lg shadow p-6">
-      <SectionTwo />
-    </div>
-    <div className="bg-blue-50 rounded-lg shadow p-6">
-      <SectionThree />
-    </div>
-  </FormNavigation>
-</div>
-```
+## Design System Integration
 
----
+### Genesis Design Tokens
 
-## 9. Accessibility
+**Colors:**
 
-The FormNavigation component includes accessibility features:
-
-- Semantic navigation structure with anchor elements
-- Keyboard navigation support for menu items
-- Focus management during scroll interactions
-- Screen reader friendly section identification
-
-```tsx
-<FormNavigation navTitles={["Accessible Section 1", "Accessible Section 2"]} viewThreshold={0.5}>
-  <section aria-labelledby="section-1-title">
-    <h2 id="section-1-title">Accessible Section 1</h2>
-    {/* Section content */}
-  </section>
-  <section aria-labelledby="section-2-title">
-    <h2 id="section-2-title">Accessible Section 2</h2>
-    {/* Section content */}
-  </section>
-</FormNavigation>
-```
-
----
-
-## 10. Design Tokens
-
-The FormNavigation component uses the following design system tokens:
-
-**Layout:**
-
-- Container width: `1136px`
-- Container spacing: `gap-gd-24` (24px gap)
-- Sidebar width: `298px`
-- Content height: `90vh` with `overflow-y-auto`
-
-**Sidebar Styling:**
-
-- Background: `bg-white`
-- Border: `border border-solid border-gray-300`
-- Border radius: `rounded-gd-16`
-- Position: `sticky top-6 left-0`
-- Height: `fit-content`
-
-**Navigation Items:**
-
-- Margin: `m-gd-16`
-- Padding: `py-[10px] px-gd-12`
-- Gap: `gap-gd-12`
-- Border radius: `rounded-gd-8`
-
-**Active State:**
-
-- Background: `bg-color-primary-20`
-- Text: `text-en-desktop-body-m-prominent text-color-neutral-grey-100`
-
-**Inactive State:**
-
-- Text: `text-en-desktop-body-m text-color-text-subdued-1`
+- `var(--gd-primary-20)`: Active navigation background
+- `var(--gd-neutral-grey-100)`: Active navigation text
+- `var(--gd-text-subdued-1)`: Inactive navigation text
 
 **Spacing:**
 
-- Section gap: `gap-gd-24` (24px between sections)
-- Navigation item spacing: `gd-12` (12px internal spacing)
+- `gd-12`: Standard padding and gaps
+- `gd-16`: Navigation item padding
+- `gd-24`: Section spacing
 
----
+**Typography:**
 
-Consider using FormNavigation with:
+- `text-en-desktop-body-m`: Navigation text
+- `text-en-desktop-body-m-prominent`: Active navigation text
 
-- **Form** — For multi-section forms
-- **Settings** — For configuration pages
-- **Documentation** — For long-form content
-- **Wizard** — For step-by-step processes
-- **Survey** — For multi-page questionnaires
+**Border Radius:**
+
+- `rounded-gd-8`: Navigation items
+- `rounded-gd-16`: Navigation container
+
+## Best Practices
+
+### Performance
+
+- Use proper form state management
+- Implement efficient section tracking
+- Optimize re-renders with proper state management
+
+### User Experience
+
+- Provide clear section titles
+- Implement proper form validation
+- Use appropriate button labels
+- Consider mobile responsiveness
+
+### Integration
+
+- Handle form state properly
+- Implement proper validation
+- Consider mobile responsiveness
+- Test with screen readers
+
+## Troubleshooting
+
+### Common Issues
+
+**Section Tracking Issues:**
+
+- Adjust viewThreshold value
+- Check section heights
+- Verify intersection observer setup
+
+**Navigation Problems:**
+
+- Verify section IDs
+- Check scroll behavior
+- Ensure proper section structure
+
+**Form State Issues:**
+
+- Implement proper state management
+- Handle form validation correctly
+- Manage section transitions
+
+### Migration Notes
+
+**From Previous Versions:**
+
+- Update import paths
+- Review prop changes
+- Test keyboard navigation
+- Verify accessibility features
+
+Remember: The Form Navigation component provides a flexible and accessible way to implement multi-step forms and complex navigation. Choose the appropriate configuration based on your specific use case and requirements.

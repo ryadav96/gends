@@ -1,418 +1,357 @@
-# Popover
+# Popover Component
 
-A flexible popover component for displaying contextual content, forms, and confirmations with customizable headers, bodies, and footers.
+## Overview
 
----
+The Popover component is a flexible and accessible floating panel built with Genesis Design System tokens. It provides a comprehensive set of features for displaying contextual information, actions, or forms in a floating panel that appears relative to a trigger element. The component supports various configurations including different sizes, scrollable content, custom headers and footers, and interactive states.
 
-## 1. Quick start
+## Component API
+
+### Popover Props
+
+| Prop                        | Type                             | Default     | Description                                 |
+| --------------------------- | -------------------------------- | ----------- | ------------------------------------------- |
+| title                       | `string`                         | `"Title"`   | Title text displayed in the header          |
+| children                    | `ReactNode`                      | `undefined` | Main content of the popover                 |
+| open                        | `boolean`                        | `false`     | Whether the popover is visible              |
+| onOpenChange                | `(open: boolean) => void`        | `undefined` | Callback when open state changes            |
+| className                   | `string`                         | `undefined` | Additional CSS classes for the container    |
+| contentClassName            | `string`                         | `undefined` | Additional CSS classes for the content area |
+| buttonColor                 | `string`                         | `undefined` | Custom color for primary button             |
+| secondaryButtonColor        | `string`                         | `undefined` | Custom color for secondary button           |
+| footerColor                 | `string`                         | `undefined` | Custom color for footer background          |
+| scrollable                  | `boolean`                        | `false`     | Whether the content area is scrollable      |
+| hasHeader                   | `boolean`                        | `true`      | Whether to show the header section          |
+| hasFooter                   | `boolean`                        | `true`      | Whether to show the footer section          |
+| size                        | `"small" \| "large"`             | `"small"`   | Size variant of the popover                 |
+| showCloseIcon               | `boolean`                        | `true`      | Whether to show the close icon in header    |
+| hasHeaderSlot               | `boolean`                        | `true`      | Whether to show the header slot             |
+| hasSecondaryButton          | `boolean`                        | `true`      | Whether to show the secondary button        |
+| headerSlotContent           | `ReactNode`                      | `undefined` | Custom content for the header slot          |
+| bodySlotContent             | `ReactNode`                      | `undefined` | Custom content for the body slot            |
+| primaryButtonIcon           | `ReactNode`                      | `undefined` | Icon for the primary button                 |
+| primaryButtonLabel          | `ReactNode`                      | `"Confirm"` | Label for the primary button                |
+| primaryButtonDisabled       | `boolean`                        | `false`     | Whether the primary button is disabled      |
+| secondaryButtonIcon         | `ReactNode`                      | `undefined` | Icon for the secondary button               |
+| secondaryButtonLabel        | `string`                         | `"Cancel"`  | Label for the secondary button              |
+| trigger                     | `ReactNode`                      | Required    | Element that triggers the popover           |
+| onPrimaryButtonClick        | `() => void`                     | `undefined` | Callback when primary button is clicked     |
+| onSecondaryButtonClick      | `() => void`                     | `undefined` | Callback when secondary button is clicked   |
+| onCloseButtonClick          | `() => void`                     | `undefined` | Callback when close button is clicked       |
+| stopContentPropagation      | `boolean`                        | `false`     | Whether to stop event propagation           |
+| bodyProps                   | `HTMLAttributes<HTMLDivElement>` | `undefined` | Additional props for body element           |
+| contentProps                | `HTMLAttributes<HTMLDivElement>` | `undefined` | Additional props for content element        |
+| headerProps                 | `HTMLAttributes<HTMLDivElement>` | `undefined` | Additional props for header element         |
+| footerProps                 | `HTMLAttributes<HTMLDivElement>` | `undefined` | Additional props for footer element         |
+| intermediateState           | `ReactNode`                      | `undefined` | Content to show during intermediate state   |
+| onIntermediateStateComplete | `() => void`                     | `undefined` | Callback when intermediate state completes  |
+
+### Import Statement
+
+```typescript
+import { Popover } from "gends";
+```
+
+## Basic Usage
+
+### Default Popover
 
 ```tsx
+import { useState } from "react";
+import { Button } from "gends";
 import { Popover } from "gends";
 
-function Example() {
+function MyComponent() {
   const [open, setOpen] = useState(false);
 
   return (
     <Popover
       open={open}
       onOpenChange={setOpen}
-      title="Confirm Action"
-      trigger={<Button>Open Popover</Button>}
-      bodySlotContent="Are you sure you want to proceed?"
-      primaryButtonLabel="Confirm"
-      onPrimaryButtonClick={() => {
-        console.log("Confirmed");
-        setOpen(false);
-      }}
-    />
+      trigger={<Button onClick={() => setOpen(!open)}>Open Popover</Button>}
+      title="My Popover"
+    >
+      Default popover content
+    </Popover>
   );
 }
 ```
 
----
+## Variants
 
-## 2. Sizes
+### Size Variants
 
-| size    | Width | Padding | Use case                        |
-| ------- | ----- | ------- | ------------------------------- |
-| `small` | 364px | 12px    | Simple forms, confirmations     |
-| `large` | 364px | 16px    | Complex forms, detailed content |
+#### Small (Default)
 
 ```tsx
-<Popover size="small" title="Small Popover" trigger={<Button>Small</Button>} />
-<Popover size="large" title="Large Popover" trigger={<Button>Large</Button>} />
+<Popover size="small" title="Small Popover" trigger={<Button>Open Small Popover</Button>}>
+  Compact popover content
+</Popover>
 ```
 
----
-
-## 3. Content sections
-
-The popover consists of three main sections:
-
-| Section  | Purpose            | Features                            |
-| -------- | ------------------ | ----------------------------------- |
-| `Header` | Title and controls | Title, custom content, close button |
-| `Body`   | Main content area  | Scrollable, custom content          |
-| `Footer` | Action buttons     | Primary/secondary buttons           |
+#### Large
 
 ```tsx
-// All sections enabled (default)
-<Popover
-  hasHeader={true}
-  hasFooter={true}
-  title="Complete Popover"
-  trigger={<Button>Open</Button>}
-  bodySlotContent="Main content goes here"
-/>
-
-// Header only
-<Popover
-  hasHeader={true}
-  hasFooter={false}
-  title="Header Only"
-  trigger={<Button>Open</Button>}
-  bodySlotContent="Content without footer"
-/>
+<Popover size="large" title="Large Popover" trigger={<Button>Open Large Popover</Button>}>
+  More spacious popover content
+</Popover>
 ```
 
----
+### Content Variants
 
-## 4. Scrollable content
+#### Scrollable Content
 
 ```tsx
-// Enable scrolling for long content
 <Popover
   title="Scrollable Content"
   scrollable={true}
-  trigger={<Button>Open</Button>}
-  bodySlotContent={<div style={{ height: "800px" }}>Long content that will scroll...</div>}
-/>
+  trigger={<Button>Open Scrollable Popover</Button>}
+>
+  {Array(50)
+    .fill(null)
+    .map((_, i) => (
+      <div key={i}>Scrollable content line {i + 1}</div>
+    ))}
+</Popover>
 ```
 
----
-
-## 5. Actions and buttons
+#### No Header
 
 ```tsx
-// Both primary and secondary actions
-<Popover
-  title="Action Popover"
-  trigger={<Button>Open</Button>}
-  bodySlotContent="Choose an action"
-  hasSecondaryButton={true}
-  primaryButtonLabel="Save"
-  secondaryButtonLabel="Cancel"
-  onPrimaryButtonClick={() => handleSave()}
-  onSecondaryButtonClick={() => handleCancel()}
-/>
-
-// Primary action only
-<Popover
-  title="Single Action"
-  trigger={<Button>Open</Button>}
-  bodySlotContent="Click to confirm"
-  hasSecondaryButton={false}
-  primaryButtonLabel="OK"
-  onPrimaryButtonClick={() => handleOK()}
-/>
-
-// Custom button states
-<Popover
-  title="Custom States"
-  trigger={<Button>Open</Button>}
-  bodySlotContent="Form content"
-  primaryButtonLabel="Submit"
-  primaryButtonDisabled={!isFormValid}
-  primaryButtonIcon={<SaveIcon />}
-/>
+<Popover hasHeader={false} trigger={<Button>Open Popover Without Header</Button>}>
+  Content without header
+</Popover>
 ```
 
----
-
-## 6. Header customization
+#### No Footer
 
 ```tsx
-// Custom header content
+<Popover hasFooter={false} trigger={<Button>Open Popover Without Footer</Button>}>
+  Content without footer
+</Popover>
+```
+
+## Advanced Features
+
+### Custom Header
+
+```tsx
+import { Slot } from "gends";
+
 <Popover
   title="Custom Header"
-  hasHeaderSlot={true}
-  headerSlotContent={<Badge>New</Badge>}
-  trigger={<Button>Open</Button>}
-  bodySlotContent="Content with custom header"
-/>
-
-// Hide close button
-<Popover
-  title="No Close Button"
-  showCloseIcon={false}
-  trigger={<Button>Open</Button>}
-  bodySlotContent="Cannot be closed with X"
-/>
+  headerSlotContent={<Slot>Custom Header Content</Slot>}
+  trigger={<Button>Open Custom Header Popover</Button>}
+>
+  Content with custom header
+</Popover>;
 ```
 
----
-
-## 7. Intermediate states
-
-```tsx
-// Show intermediate state during processing
-<Popover
-  title="Processing"
-  trigger={<Button>Open</Button>}
-  bodySlotContent="Click submit to see intermediate state"
-  primaryButtonLabel="Submit"
-  intermediateState={
-    <div className="text-center py-4">
-      <Spinner />
-      <p>Processing your request...</p>
-    </div>
-  }
-  onIntermediateStateComplete={() => {
-    // Called after 2 seconds
-    console.log("Processing complete");
-  }}
-/>
-```
-
----
-
-## 8. Full prop reference
-
-### Basic Props
-
-| Prop           | Type                      | Default   | Description                   |
-| -------------- | ------------------------- | --------- | ----------------------------- |
-| `title`        | `string`                  | `"Title"` | Popover title text            |
-| `open`         | `boolean`                 | `false`   | Controlled open state         |
-| `onOpenChange` | `(open: boolean) => void` | -         | Open state change handler     |
-| `trigger`      | `ReactNode`               | -         | Element that triggers popover |
-| `size`         | `'small' \| 'large'`      | `'small'` | Popover size                  |
-
-### Content Props
-
-| Prop                | Type        | Default | Description                     |
-| ------------------- | ----------- | ------- | ------------------------------- |
-| `children`          | `ReactNode` | -       | Main body content               |
-| `bodySlotContent`   | `ReactNode` | -       | Alternative body content        |
-| `headerSlotContent` | `ReactNode` | -       | Custom header content           |
-| `intermediateState` | `ReactNode` | -       | Content shown during processing |
-
-### Layout Props
-
-| Prop            | Type      | Default | Description                  |
-| --------------- | --------- | ------- | ---------------------------- |
-| `hasHeader`     | `boolean` | `true`  | Show header section          |
-| `hasFooter`     | `boolean` | `true`  | Show footer section          |
-| `scrollable`    | `boolean` | `false` | Enable body scrolling        |
-| `showCloseIcon` | `boolean` | `true`  | Show close button in header  |
-| `hasHeaderSlot` | `boolean` | `true`  | Enable custom header content |
-
-### Button Props
-
-| Prop                    | Type        | Default     | Description            |
-| ----------------------- | ----------- | ----------- | ---------------------- |
-| `hasSecondaryButton`    | `boolean`   | `true`      | Show secondary button  |
-| `primaryButtonLabel`    | `ReactNode` | `"Confirm"` | Primary button text    |
-| `secondaryButtonLabel`  | `string`    | `"Cancel"`  | Secondary button text  |
-| `primaryButtonIcon`     | `ReactNode` | -           | Primary button icon    |
-| `secondaryButtonIcon`   | `ReactNode` | -           | Secondary button icon  |
-| `primaryButtonDisabled` | `boolean`   | `false`     | Disable primary button |
-
-### Event Handlers
-
-| Prop                          | Type         | Description                    |
-| ----------------------------- | ------------ | ------------------------------ |
-| `onPrimaryButtonClick`        | `() => void` | Primary button click handler   |
-| `onSecondaryButtonClick`      | `() => void` | Secondary button click handler |
-| `onCloseButtonClick`          | `() => void` | Close button click handler     |
-| `onIntermediateStateComplete` | `() => void` | Intermediate state completion  |
-
-### Styling Props
-
-| Prop                   | Type     | Description                 |
-| ---------------------- | -------- | --------------------------- |
-| `className`            | `string` | Container CSS classes       |
-| `contentClassName`     | `string` | Content area CSS classes    |
-| `buttonColor`          | `string` | Primary button background   |
-| `secondaryButtonColor` | `string` | Secondary button background |
-| `footerColor`          | `string` | Footer background color     |
-
-### Advanced Props
-
-| Prop                     | Type                                   | Description                  |
-| ------------------------ | -------------------------------------- | ---------------------------- |
-| `stopContentPropagation` | `boolean`                              | Stop click event propagation |
-| `bodyProps`              | `React.HTMLAttributes<HTMLDivElement>` | Body section props           |
-| `contentProps`           | `React.HTMLAttributes<HTMLDivElement>` | Content container props      |
-| `headerProps`            | `React.HTMLAttributes<HTMLDivElement>` | Header section props         |
-| `footerProps`            | `React.HTMLAttributes<HTMLDivElement>` | Footer section props         |
-
----
-
-## 9. Recipes
-
-### Confirmation dialog
+### Custom Buttons
 
 ```tsx
 <Popover
-  title="Delete Item"
-  trigger={<Button appearance="negative">Delete</Button>}
-  bodySlotContent="Are you sure you want to delete this item? This action cannot be undone."
-  primaryButtonLabel="Delete"
-  secondaryButtonLabel="Cancel"
-  buttonColor="#dc2626"
-  onPrimaryButtonClick={() => handleDelete()}
-/>
+  title="Custom Buttons"
+  primaryButtonLabel="Save Changes"
+  secondaryButtonLabel="Discard"
+  onPrimaryButtonClick={() => handleSave()}
+  onSecondaryButtonClick={() => handleDiscard()}
+  trigger={<Button>Open Custom Buttons Popover</Button>}
+>
+  Content with custom button labels
+</Popover>
 ```
 
-### Form popover
+### Intermediate State
 
 ```tsx
 <Popover
-  title="Add New Item"
-  size="large"
-  trigger={<Button>Add Item</Button>}
-  bodySlotContent={
-    <form className="space-y-4">
-      <Input label="Name" placeholder="Enter name" />
-      <Input label="Email" placeholder="Enter email" type="email" />
-      <Textarea label="Description" placeholder="Enter description" />
-    </form>
-  }
-  primaryButtonLabel="Add Item"
-  primaryButtonIcon={<PlusIcon />}
-  primaryButtonDisabled={!isFormValid}
-  onPrimaryButtonClick={() => handleSubmit()}
-/>
+  title="With Intermediate State"
+  intermediateState={<div>Processing...</div>}
+  onIntermediateStateComplete={() => handleComplete()}
+  trigger={<Button>Open Intermediate State Popover</Button>}
+>
+  Content that shows intermediate state
+</Popover>
 ```
 
-### Information popover
+## Real-World Usage Examples
+
+### Form in Popover
+
+```tsx
+function FormPopover() {
+  const [open, setOpen] = useState(false);
+  const [formData, setFormData] = useState({});
+
+  const handleSubmit = () => {
+    // Handle form submission
+    setOpen(false);
+  };
+
+  return (
+    <Popover
+      open={open}
+      onOpenChange={setOpen}
+      title="Edit Profile"
+      primaryButtonLabel="Save"
+      secondaryButtonLabel="Cancel"
+      onPrimaryButtonClick={handleSubmit}
+      trigger={<Button>Edit Profile</Button>}
+    >
+      <form className="space-y-4">
+        <input
+          type="text"
+          placeholder="Name"
+          onChange={e => setFormData({ ...formData, name: e.target.value })}
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          onChange={e => setFormData({ ...formData, email: e.target.value })}
+        />
+      </form>
+    </Popover>
+  );
+}
+```
+
+### Confirmation Dialog
+
+```tsx
+function ConfirmationPopover() {
+  const [open, setOpen] = useState(false);
+
+  const handleConfirm = () => {
+    // Handle confirmation
+    setOpen(false);
+  };
+
+  return (
+    <Popover
+      open={open}
+      onOpenChange={setOpen}
+      title="Confirm Action"
+      primaryButtonLabel="Delete"
+      secondaryButtonLabel="Cancel"
+      onPrimaryButtonClick={handleConfirm}
+      trigger={<Button>Delete Item</Button>}
+    >
+      Are you sure you want to delete this item? This action cannot be undone.
+    </Popover>
+  );
+}
+```
+
+### Custom Styled Popover
 
 ```tsx
 <Popover
-  title="Help Information"
-  trigger={<IconButton icon={<HelpIcon />} />}
-  hasFooter={false}
-  bodySlotContent={
-    <div className="prose prose-sm">
-      <p>This feature helps you manage your account settings.</p>
-      <ul>
-        <li>Update your profile</li>
-        <li>Change preferences</li>
-        <li>Manage notifications</li>
-      </ul>
-    </div>
-  }
-/>
+  title="Custom Styled"
+  className="custom-popover"
+  contentClassName="custom-content"
+  buttonColor="#4B4BFF"
+  secondaryButtonColor="#F5F5F5"
+  footerColor="#FAFAFA"
+  trigger={<Button>Open Custom Styled Popover</Button>}
+>
+  Content with custom styling
+</Popover>
 ```
 
-### Processing popover with intermediate state
+## Accessibility Features
 
-```tsx
-<Popover
-  title="Upload File"
-  trigger={<Button>Upload</Button>}
-  bodySlotContent={
-    <div>
-      <p>Select a file to upload</p>
-      <FileInput onChange={setSelectedFile} />
-    </div>
-  }
-  primaryButtonLabel="Upload"
-  intermediateState={
-    <div className="text-center py-8">
-      <Spinner size="lg" />
-      <p className="mt-4">Uploading file...</p>
-    </div>
-  }
-  onPrimaryButtonClick={() => startUpload()}
-  onIntermediateStateComplete={() => {
-    notify({ title: "Upload complete!", variant: "success" });
-  }}
-/>
-```
+### Keyboard Navigation
 
-### Custom styled popover
+- **Focus Management**: Proper focus trapping within popover
+- **ARIA Attributes**: Appropriate roles and labels
+- **Keyboard Shortcuts**: Escape to close, Tab for navigation
+- **Focus Return**: Returns focus to trigger when closed
 
-```tsx
-<Popover
-  title="Custom Popover"
-  trigger={<Button>Custom Style</Button>}
-  className="border-2 border-purple-200"
-  contentClassName="bg-gradient-to-br from-purple-50 to-pink-50"
-  footerColor="#f3e8ff"
-  buttonColor="#8b5cf6"
-  bodySlotContent="This popover has custom styling"
-/>
-```
+### Screen Reader Support
 
----
+- **ARIA Labels**: Clear identification of popover purpose
+- **Live Regions**: Dynamic content updates announced
+- **Role Descriptions**: Proper semantic structure
 
-## 10. Accessibility
+### Visual Accessibility
 
-The Popover component includes comprehensive accessibility features:
+- **Color Contrast**: Meets WCAG 2.1 contrast requirements
+- **Focus Indicators**: Clear visual feedback
+- **Motion**: Respects reduced motion preferences
 
-- Proper ARIA attributes and roles
-- Keyboard navigation support (Escape to close)
-- Focus management and trapping
-- Screen reader announcements
-- Accessible button states
+## Design System Integration
 
-```tsx
-<Popover
-  title="Accessible Popover"
-  trigger={<Button aria-describedby="popover-help">Open</Button>}
-  bodySlotContent="This popover is fully accessible"
-  aria-label="Help dialog"
-  role="dialog"
-/>
-```
-
----
-
-## 11. Design Tokens
-
-The Popover component uses the following design system tokens:
-
-**Layout:**
-
-- Width: `364px` (both sizes)
-- Border radius: `16px`
-- Shadow: `shadow-gd-shadow-m`
-- Z-index: `100`
-
-**Header:**
-
-- Small height: `40px`
-- Large height: `56px`
-- Background: `bg-color-background-surface-20`
-
-**Body:**
-
-- Small padding: `12px 16px`
-- Large padding: `16px`
-- Max height (scrollable): `656px`
-
-**Footer:**
-
-- Small padding: `8px 12px`
-- Large padding: `12px 16px`
+### Genesis Design Tokens
 
 **Typography:**
 
-- Title: `text-en-desktop-heading-xl font-600`
+- Title: `text-en-desktop-heading-xl`
+- Content: `text-en-desktop-body-m`
 
-**Colors:**
+**Spacing:**
 
-- Background: `bg-color-neutral-white`
-- Border: `border-0`
+- Small Header: `h-gd-40 px-gd-12 py-gd-8`
+- Large Header: `h-[56px] px-gd-16 py-gd-12`
+- Small Content: `px-gd-12 py-gd-16`
+- Large Content: `p-gd-16`
 
----
+**Layout:**
 
-Consider using Popover with:
+- Width: `w-[364px]`
+- Border Radius: `rounded-gd-16`
+- Shadow: `shadow-gd-shadow-m`
 
-- **Button** — For trigger elements
-- **IconButton** — For close actions
-- **Form** — For input popovers
-- **Tooltip** — For simple information
-- **Modal** — For complex dialogs
+## Best Practices
+
+### Performance
+
+- Use intermediate states for async operations
+- Optimize content rendering
+- Handle cleanup properly
+
+### User Experience
+
+- Keep content concise and focused
+- Provide clear actions
+- Consider mobile interactions
+- Handle edge cases gracefully
+
+### Integration
+
+- Follow design system guidelines
+- Maintain consistent spacing
+- Consider loading states
+- Handle errors appropriately
+
+## Troubleshooting
+
+### Common Issues
+
+**Positioning:**
+
+- Check trigger element
+- Verify z-index values
+- Review overflow handling
+
+**State Management:**
+
+- Handle open/close properly
+- Manage intermediate states
+- Clean up timeouts
+
+**Styling:**
+
+- Check custom styles
+- Verify design tokens
+- Review responsive behavior
+
+### Migration Notes
+
+**From Previous Versions:**
+
+- Update import paths
+- Review prop changes
+- Test all variants
+- Verify accessibility
+
+Remember: The Popover component provides a flexible and accessible way to display contextual information and actions. Choose the appropriate configuration based on your specific use case and requirements.

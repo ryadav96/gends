@@ -1,350 +1,315 @@
-# RightPanel
+# Right Panel Component
 
-A flexible right-side panel component that supports multiple sizes, customizable headers and footers, extension behavior, and comprehensive content management.
+## Overview
 
----
+The Right Panel component is a versatile slide-out panel that provides a flexible and accessible way to display supplementary content, forms, or detailed information. Built with Genesis Design System tokens, it offers multiple width variants, expandable functionality, customizable headers and footers, and comprehensive interaction controls. The component is designed to work seamlessly within the MCP context while maintaining full accessibility support.
 
-## 1. Quick start
+## Component API
+
+### RightPanel Props
+
+| Prop             | Type                               | Default         | Description                                      |
+| ---------------- | ---------------------------------- | --------------- | ------------------------------------------------ |
+| title            | `string`                           | `"Page Label"`  | The title displayed in the panel header          |
+| subTitle         | `string`                           | `"description"` | Subtitle text displayed below the title          |
+| openBtnTitle     | `string`                           | `"Open"`        | Text for the button that opens the panel         |
+| width            | `"xs" \| "s" \| "m" \| "l" \| "f"` | `"s"`           | Initial width of the panel                       |
+| maxWidth         | `"xs" \| "s" \| "m" \| "l" \| "f"` | `"l"`           | Maximum width when expanded                      |
+| extension        | `boolean`                          | `false`         | Whether to show expand/collapse controls         |
+| tagText          | `string`                           | `"tag"`         | Text to display in the tag                       |
+| showTag          | `boolean`                          | `false`         | Whether to show the tag next to the title        |
+| showSubTitle     | `boolean`                          | `false`         | Whether to show the subtitle                     |
+| showBack         | `boolean`                          | `false`         | Whether to show the back button                  |
+| showFooter       | `boolean`                          | `true`          | Whether to show the footer with action buttons   |
+| showSecondaryBtn | `boolean`                          | `true`          | Whether to show the secondary button in footer   |
+| showPrimaryBtn   | `boolean`                          | `true`          | Whether to show the primary button in footer     |
+| primaryAction    | `() => void`                       | `() => {}`      | Function called when primary button is clicked   |
+| secondaryAction  | `() => void`                       | `() => {}`      | Function called when secondary button is clicked |
+| backAction       | `() => void`                       | `() => {}`      | Function called when back button is clicked      |
+| children         | `ReactNode`                        | `undefined`     | Content to display inside the panel              |
+| noTriggerBtn     | `boolean`                          | `false`         | Whether to hide trigger button                   |
+| open             | `boolean`                          | `false`         | Controls the open state of the panel             |
+| setOpen          | `(open: boolean) => void`          | `() => {}`      | Function to control the open state               |
+| trigger          | `ReactNode`                        | `undefined`     | Custom trigger element to open the panel         |
+
+### Import Statement
+
+```typescript
+import { RightPanel } from "gends";
+```
+
+## Basic Usage
+
+### Default Panel
 
 ```tsx
 import { RightPanel } from "gends";
 
-function Example() {
+function MyComponent() {
   return (
-    <RightPanel
-      title="Page Label"
-      width="s"
-      showFooter={true}
-      showPrimaryBtn={true}
-      showSecondaryBtn={true}
-    >
-      Content goes here
+    <RightPanel title="Settings" subTitle="Configure your preferences" openBtnTitle="Open Settings">
+      <div className="p-4">
+        <h3>Panel Content</h3>
+        <p>Your content goes here</p>
+      </div>
     </RightPanel>
   );
 }
 ```
 
----
+## Variants
 
-## 2. Sizes
+### Width Variants
 
-| size | Width | Description       | Use case               |
-| ---- | ----- | ----------------- | ---------------------- |
-| `xs` | 362px | Extra small panel | Quick views            |
-| `s`  | 475px | Small panel       | Simple forms           |
-| `m`  | 700px | Medium panel      | Standard content       |
-| `l`  | 925px | Large panel       | Complex forms          |
-| `f`  | 100%  | Full width        | Full-screen experience |
+#### Extra Small (xs) - 362px
 
 ```tsx
-<RightPanel width="xs" title="Quick View" />
-<RightPanel width="s" title="Simple Form" />
-<RightPanel width="m" title="Standard Content" />
-<RightPanel width="l" title="Complex Form" />
-<RightPanel width="f" title="Full Experience" />
+<RightPanel width="xs" title="Compact Panel" subTitle="Extra small width variant">
+  <div className="p-4">Compact content</div>
+</RightPanel>
 ```
 
----
-
-## 3. Header configurations
-
-| header feature | Description             | Use case               |
-| -------------- | ----------------------- | ---------------------- |
-| Title          | Main panel title        | Basic identification   |
-| Subtitle       | Supporting description  | Additional context     |
-| Tag            | Feature tag             | Feature identification |
-| Back button    | Navigation control      | Multi-step workflows   |
-| Extension      | Expand/collapse control | Resizable panels       |
+#### Small (s) - 475px
 
 ```tsx
-// Basic header with title
-<RightPanel title="Basic Header" />
-
-// Header with subtitle
-<RightPanel
-  title="Main Title"
-  subTitle="Supporting description"
-  showSubTitle={true}
-/>
-
-// Header with tag
-<RightPanel
-  title="Feature Panel"
-  tagText="Beta"
-  showTag={true}
-/>
-
-// Header with back button
-<RightPanel
-  title="Step 2"
-  showBack={true}
-  backAction={() => handleBack()}
-/>
-
-// Extensible header
-<RightPanel
-  title="Resizable Panel"
-  extension={true}
-  maxWidth="l"
-/>
+<RightPanel width="s" title="Small Panel" subTitle="Small width variant">
+  <div className="p-4">Small content</div>
+</RightPanel>
 ```
 
----
-
-## 4. Footer configurations
-
-| footer feature   | Description        | Use case          |
-| ---------------- | ------------------ | ----------------- |
-| Primary button   | Main action button | Primary actions   |
-| Secondary button | Alternative action | Secondary actions |
-| No footer        | Content-only panel | View-only content |
+#### Medium (m) - 700px
 
 ```tsx
-// Default footer with both buttons
-<RightPanel
-  showFooter={true}
-  showPrimaryBtn={true}
-  showSecondaryBtn={true}
-  primaryAction={() => handlePrimary()}
-  secondaryAction={() => handleSecondary()}
-/>
+<RightPanel width="m" title="Medium Panel" subTitle="Medium width variant">
+  <div className="p-4">Medium content</div>
+</RightPanel>
+```
 
-// Primary button only
-<RightPanel
-  showFooter={true}
-  showPrimaryBtn={true}
-  showSecondaryBtn={false}
-/>
+#### Large (l) - 925px
 
-// No footer
+```tsx
+<RightPanel width="l" title="Large Panel" subTitle="Large width variant">
+  <div className="p-4">Large content</div>
+</RightPanel>
+```
+
+#### Full (f) - 100vw
+
+```tsx
+<RightPanel width="f" title="Full Panel" subTitle="Full width variant">
+  <div className="p-4">Full width content</div>
+</RightPanel>
+```
+
+### Header Variants
+
+#### With Tag
+
+```tsx
+<RightPanel title="Panel with Tag" showTag tagText="New">
+  <div className="p-4">Content with tag</div>
+</RightPanel>
+```
+
+#### With Back Button
+
+```tsx
+<RightPanel title="Panel with Back" showBack backAction={() => console.log("Back clicked")}>
+  <div className="p-4">Content with back button</div>
+</RightPanel>
+```
+
+#### With Subtitle
+
+```tsx
+<RightPanel title="Panel with Subtitle" showSubTitle subTitle="Additional context about this panel">
+  <div className="p-4">Content with subtitle</div>
+</RightPanel>
+```
+
+### Footer Variants
+
+#### Primary Button Only
+
+```tsx
+<RightPanel showSecondaryBtn={false} primaryAction={() => console.log("Primary action")}>
+  <div className="p-4">Content with primary button only</div>
+</RightPanel>
+```
+
+#### Secondary Button Only
+
+```tsx
+<RightPanel showPrimaryBtn={false} secondaryAction={() => console.log("Secondary action")}>
+  <div className="p-4">Content with secondary button only</div>
+</RightPanel>
+```
+
+#### No Footer
+
+```tsx
 <RightPanel showFooter={false}>
-  Content only
+  <div className="p-4">Content without footer</div>
 </RightPanel>
 ```
 
----
+## Advanced Features
 
-## 5. Trigger options
+### Expandable Panel
 
 ```tsx
-// Default trigger button
-<RightPanel title="With Default Trigger">
-  Content
-</RightPanel>
-
-// Custom trigger
-<RightPanel
-  trigger={<Button>Custom Open</Button>}
-  title="Custom Trigger Panel"
->
-  Content
-</RightPanel>
-
-// No trigger (controlled externally)
-<RightPanel
-  noTriggerBtn={true}
-  open={isOpen}
-  setOpen={setOpen}
-  title="Controlled Panel"
->
-  Content
+<RightPanel extension width="s" maxWidth="l" title="Expandable Panel">
+  <div className="p-4">
+    <p>This panel can be expanded to a larger width</p>
+  </div>
 </RightPanel>
 ```
 
----
-
-## 6. Extension behavior
+### Custom Trigger
 
 ```tsx
-// Resizable panel
-<RightPanel
-  extension={true}
-  width="s"
-  maxWidth="l"
-  title="Resizable Panel"
->
-  Content that can be viewed in expanded mode
-</RightPanel>
-
-// Fixed width panel
-<RightPanel
-  extension={false}
-  width="m"
-  title="Fixed Width Panel"
->
-  Content with fixed width
+<RightPanel noTriggerBtn trigger={<button className="custom-trigger">Custom Open Button</button>}>
+  <div className="p-4">Content with custom trigger</div>
 </RightPanel>
 ```
 
----
-
-## 7. Full prop reference
-
-### Basic Props
-
-| Prop        | Type                               | Default        | Description             |
-| ----------- | ---------------------------------- | -------------- | ----------------------- |
-| `title`     | `string`                           | `"Page Label"` | Panel title             |
-| `width`     | `'xs' \| 's' \| 'm' \| 'l' \| 'f'` | `'s'`          | Panel width variant     |
-| `maxWidth`  | `'xs' \| 's' \| 'm' \| 'l' \| 'f'` | `'l'`          | Maximum extension width |
-| `extension` | `boolean`                          | `false`        | Enable width extension  |
-| `children`  | `ReactNode`                        | -              | Panel content           |
-
-### Header Props
-
-| Prop           | Type      | Default         | Description      |
-| -------------- | --------- | --------------- | ---------------- |
-| `subTitle`     | `string`  | `"description"` | Subtitle text    |
-| `tagText`      | `string`  | `"tag"`         | Feature tag text |
-| `showTag`      | `boolean` | `false`         | Show feature tag |
-| `showSubTitle` | `boolean` | `false`         | Show subtitle    |
-| `showBack`     | `boolean` | `false`         | Show back button |
-
-### Footer Props
-
-| Prop               | Type       | Default | Description              |
-| ------------------ | ---------- | ------- | ------------------------ |
-| `showFooter`       | `boolean`  | `true`  | Show footer section      |
-| `showPrimaryBtn`   | `boolean`  | `true`  | Show primary button      |
-| `showSecondaryBtn` | `boolean`  | `true`  | Show secondary button    |
-| `primaryAction`    | `function` | `noop`  | Primary button handler   |
-| `secondaryAction`  | `function` | `noop`  | Secondary button handler |
-
-### Control Props
-
-| Prop           | Type        | Default | Description            |
-| -------------- | ----------- | ------- | ---------------------- |
-| `noTriggerBtn` | `boolean`   | `false` | Hide default trigger   |
-| `trigger`      | `ReactNode` | -       | Custom trigger element |
-| `open`         | `boolean`   | -       | Controlled open state  |
-| `setOpen`      | `function`  | `noop`  | Open state setter      |
-| `backAction`   | `function`  | `noop`  | Back button handler    |
-
----
-
-## 8. Recipes
-
-### Basic right panel
+### Controlled State
 
 ```tsx
-<RightPanel
-  title="User Details"
-  width="s"
-  showFooter={true}
-  showPrimaryBtn={true}
-  primaryAction={() => handleSave()}
->
-  <UserDetailsForm />
-</RightPanel>
+function ControlledPanel() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <RightPanel open={isOpen} setOpen={setIsOpen} title="Controlled Panel">
+      <div className="p-4">
+        <p>This panel's state is controlled externally</p>
+        <button onClick={() => setIsOpen(false)}>Close Panel</button>
+      </div>
+    </RightPanel>
+  );
+}
 ```
 
-### Multi-step workflow panel
+## Real-World Usage Examples
+
+### Form Panel
 
 ```tsx
-<RightPanel
-  title="Create Project"
-  width="m"
-  showBack={currentStep > 1}
-  backAction={() => setCurrentStep(prev => prev - 1)}
-  showFooter={true}
-  showPrimaryBtn={true}
-  showSecondaryBtn={true}
-  primaryAction={() => handleNextStep()}
-  secondaryAction={() => handleCancel()}
->
-  <StepContent step={currentStep} />
-</RightPanel>
+function FormPanel() {
+  const handleSubmit = () => {
+    console.log("Form submitted");
+  };
+
+  return (
+    <RightPanel
+      title="Edit Profile"
+      subTitle="Update your personal information"
+      primaryAction={handleSubmit}
+      secondaryAction={() => console.log("Cancelled")}
+    >
+      <form className="p-4 space-y-4">
+        <div>
+          <label>Name</label>
+          <input type="text" />
+        </div>
+        <div>
+          <label>Email</label>
+          <input type="email" />
+        </div>
+      </form>
+    </RightPanel>
+  );
+}
 ```
 
-### Feature preview panel
+### Details Panel
 
 ```tsx
-<RightPanel
-  title="New Feature"
-  tagText="Beta"
-  showTag={true}
-  width="s"
-  extension={true}
-  maxWidth="l"
-  showFooter={true}
-  showPrimaryBtn={true}
-  primaryAction={() => handleTryFeature()}
->
-  <FeaturePreview />
-</RightPanel>
+function DetailsPanel({ item }) {
+  return (
+    <RightPanel
+      title={item.name}
+      showTag
+      tagText={item.status}
+      showBack
+      backAction={() => console.log("Back to list")}
+    >
+      <div className="p-4">
+        <h3>Details</h3>
+        <p>{item.description}</p>
+        <div className="mt-4">
+          <h4>Additional Information</h4>
+          <ul>
+            {item.details.map((detail, index) => (
+              <li key={index}>{detail}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </RightPanel>
+  );
+}
 ```
 
-### View-only panel
+### Multi-step Panel
 
 ```tsx
-<RightPanel
-  title="Documentation"
-  width="m"
-  showFooter={false}
-  trigger={<Button kind="secondary">View Docs</Button>}
->
-  <DocumentationContent />
-</RightPanel>
+function MultiStepPanel() {
+  const [step, setStep] = useState(1);
+
+  return (
+    <RightPanel
+      title={`Step ${step} of 3`}
+      showBack={step > 1}
+      backAction={() => setStep(step - 1)}
+      primaryAction={() => setStep(step + 1)}
+      showPrimaryBtn={step < 3}
+    >
+      <div className="p-4">
+        {step === 1 && <div>Step 1 Content</div>}
+        {step === 2 && <div>Step 2 Content</div>}
+        {step === 3 && <div>Step 3 Content</div>}
+      </div>
+    </RightPanel>
+  );
+}
 ```
 
-### Controlled panel with external trigger
+## Accessibility Features
 
-```tsx
-const [isOpen, setIsOpen] = useState(false);
+### Keyboard Navigation
 
-<Button onClick={() => setIsOpen(true)}>
-  Open Details
-</Button>
+- **Focus Management**: Proper focus handling when opening/closing
+- **ARIA Attributes**: Appropriate roles and labels
+- **Keyboard Shortcuts**: Escape to close
+- **Focus Trapping**: Focus remains within panel when open
 
-<RightPanel
-  noTriggerBtn={true}
-  open={isOpen}
-  setOpen={setIsOpen}
-  title="Details View"
-  width="s"
->
-  <DetailsContent />
-</RightPanel>
-```
+### Screen Reader Support
 
----
+- **ARIA Labels**: Clear identification of panel purpose
+- **Live Regions**: Dynamic content updates announced
+- **Role Descriptions**: Proper semantic structure
 
-## 9. Accessibility
+### Visual Accessibility
 
-The RightPanel component includes accessibility features:
+- **Color Contrast**: Meets WCAG 2.1 contrast requirements
+- **Focus Indicators**: Clear visual feedback
+- **Motion**: Respects reduced motion preferences
 
-- Focus trap within panel content
-- Keyboard navigation support (Escape to close)
-- Proper ARIA attributes and roles
-- Focus restoration on close
-- Screen reader announcements
+## Design System Integration
 
-```tsx
-<RightPanel title="Accessible Panel" role="dialog" aria-labelledby="panel-title">
-  <AccessibleContent />
-</RightPanel>
-```
+### Genesis Design Tokens
 
----
+**Typography:**
 
-## 10. Design Tokens
-
-The RightPanel component uses the following design system tokens:
-
-**Sizing:**
-
-- XSmall: `sm:max-w-[362px]`
-- Small: `sm:max-w-[475px]`
-- Medium: `sm:max-w-[700px]`
-- Large: `sm:max-w-[925px]`
-- Full: `sm:max-w-[100vw]`
+- Title: `text-en-desktop-heading-xl`
+- Subtitle: `text-en-desktop-body-m`
 
 **Spacing:**
 
-- Header padding: `p-gd-16`
-- Content background: `bg-color-background-surface-10`
-- Footer padding: `p-gd-16`
-- Gap: `gap-gd-4`, `gap-gd-8`, `gap-gd-16`
+- Header Padding: `p-gd-16`
+- Content Padding: `p-gd-16`
+- Gap Between Elements: `gap-gd-4`
 
 **Colors:**
 
@@ -352,24 +317,57 @@ The RightPanel component uses the following design system tokens:
 - Border: `border-color-neutral-grey-40`
 - Text: `text-color-neutral-grey-80`
 
-**Typography:**
+## Best Practices
 
-- Title: `text-en-desktop-heading-xl`
-- Subtitle: `text-en-desktop-body-m`
-- Tag: Feature tag styling
+### Performance
 
-**Layout:**
+- Use controlled components when needed
+- Optimize re-renders
+- Handle cleanup properly
 
-- Border: `border-b-[1px]` (header), `border-t-[1px]` (footer)
-- Flex layout with proper spacing
-- Sticky header positioning
+### User Experience
 
----
+- Keep content focused and relevant
+- Provide clear navigation options
+- Consider mobile interactions
+- Handle edge cases gracefully
 
-Consider using RightPanel with:
+### Integration
 
-- **Form** — For data entry workflows
-- **Details** — For record viewing
-- **Settings** — For configuration panels
-- **Preview** — For content inspection
-- **Documentation** — For contextual help
+- Follow design system guidelines
+- Maintain consistent spacing
+- Consider loading states
+- Handle errors appropriately
+
+## Troubleshooting
+
+### Common Issues
+
+**Opening/Closing:**
+
+- Check open state management
+- Verify trigger button setup
+- Review event handlers
+
+**Styling:**
+
+- Check custom styles
+- Verify design tokens
+- Review responsive behavior
+
+**Accessibility:**
+
+- Verify ARIA attributes
+- Test keyboard navigation
+- Check screen reader support
+
+### Migration Notes
+
+**From Previous Versions:**
+
+- Update import paths
+- Review prop changes
+- Test all variants
+- Verify accessibility
+
+Remember: The Right Panel component provides a flexible and accessible way to display supplementary content. Choose the appropriate configuration based on your specific use case and requirements.

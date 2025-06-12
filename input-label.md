@@ -13,7 +13,7 @@ A flexible and reusable label component designed for form inputs with support fo
 ## Installation
 
 ```tsx
-import { InputLabel } from 'gends';
+import { InputLabel } from "gends";
 ```
 
 ## Usage
@@ -21,26 +21,19 @@ import { InputLabel } from 'gends';
 ### Basic Label
 
 ```tsx
-<InputLabel 
-  htmlFor="email-input"
-  label="Email Address"
-/>
+<InputLabel htmlFor="email-input" label="Email Address" />
 ```
 
 ### Required Field Label
 
 ```tsx
-<InputLabel 
-  htmlFor="email-input"
-  label="Email Address"
-  required={true}
-/>
+<InputLabel htmlFor="email-input" label="Email Address" required={true} />
 ```
 
 ### Label with Help Icon
 
 ```tsx
-<InputLabel 
+<InputLabel
   htmlFor="password-input"
   label="Password"
   required={true}
@@ -52,7 +45,7 @@ import { InputLabel } from 'gends';
 ### Label with Character Counter
 
 ```tsx
-<InputLabel 
+<InputLabel
   htmlFor="description-input"
   label="Description"
   showCounter={true}
@@ -63,29 +56,25 @@ import { InputLabel } from 'gends';
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| htmlFor | string | required | ID of the input element this label is tied to |
-| label | string | required | The text content of the label |
-| required | boolean | false | Whether to show a required field indicator (*) |
-| showHelpIcon | boolean | false | Whether to show the help icon |
-| helpTooltipMessage | string | undefined | Content to show in the help tooltip |
-| handleHelpClick | () => void | undefined | Callback when help icon is clicked |
-| className | string | undefined | Additional CSS classes to apply to the label container |
-| showCounter | boolean | false | Whether to show the character counter |
-| currentCount | number | 0 | Current character count |
-| maxCount | number | undefined | Maximum character count |
+| Prop               | Type       | Default   | Description                                            |
+| ------------------ | ---------- | --------- | ------------------------------------------------------ |
+| htmlFor            | string     | required  | ID of the input element this label is tied to          |
+| label              | string     | required  | The text content of the label                          |
+| required           | boolean    | false     | Whether to show a required field indicator (\*)        |
+| showHelpIcon       | boolean    | false     | Whether to show the help icon                          |
+| helpTooltipMessage | string     | undefined | Content to show in the help tooltip                    |
+| handleHelpClick    | () => void | undefined | Callback when help icon is clicked                     |
+| className          | string     | undefined | Additional CSS classes to apply to the label container |
+| showCounter        | boolean    | false     | Whether to show the character counter                  |
+| currentCount       | number     | 0         | Current character count                                |
+| maxCount           | number     | undefined | Maximum character count                                |
 
 ## Examples
 
 ### Basic Required Field
 
 ```tsx
-<InputLabel
-  htmlFor="name"
-  label="Full Name"
-  required={true}
-/>
+<InputLabel htmlFor="name" label="Full Name" required={true} />
 ```
 
 ### With Help Icon and Tooltip
@@ -103,13 +92,7 @@ import { InputLabel } from 'gends';
 ### With Character Counter
 
 ```tsx
-<InputLabel
-  htmlFor="bio"
-  label="Bio"
-  showCounter={true}
-  currentCount={50}
-  maxCount={200}
-/>
+<InputLabel htmlFor="bio" label="Bio" showCounter={true} currentCount={50} maxCount={200} />
 ```
 
 ### Full Featured Example

@@ -1,350 +1,330 @@
-# Pagination
+# Pagination Component
 
-A comprehensive pagination system with navigation controls, page input, and rows-per-page selection for data tables and list views.
+## Overview
 
----
+The Pagination component is a flexible and accessible navigation system built with Genesis Design System tokens. It provides a comprehensive set of features for navigating through paginated content with support for both top and bottom positioning, customizable page sizes, and responsive design. The component is designed for various use cases such as data tables, lists, and content pagination with complete accessibility support.
 
-## 1. Quick start
+## Component API
+
+### Pagination Props
+
+| Prop             | Type                         | Default                | Description                                  |
+| ---------------- | ---------------------------- | ---------------------- | -------------------------------------------- |
+| currentPage      | `number`                     | Required               | The current page number                      |
+| totalPages       | `number`                     | Required               | Total number of pages to display             |
+| pageSize         | `number`                     | Required               | Number of items per page                     |
+| onPageChange     | `(page: number) => void`     | Required               | Function called when page changes            |
+| onPageSizeChange | `(pageSize: number) => void` | Required               | Function called when page size changes       |
+| variant          | `"top" \| "bottom"`          | `"bottom"`             | Position variant of the pagination component |
+| pageSizeOptions  | `number[]`                   | `[5, 10, 20, 50, 100]` | Available options for page size selection    |
+| isLoading        | `boolean`                    | `false`                | Whether the component is in loading state    |
+| isEmpty          | `boolean`                    | `false`                | Whether there is no data to paginate         |
+| className        | `string`                     | `undefined`            | Additional CSS classes for the component     |
+
+### Import Statement
+
+```typescript
+import { Pagination } from "gends";
+```
+
+## Basic Usage
+
+### Default Pagination
 
 ```tsx
-import {
-  PaginationRoot,
-  PaginationRowsPerPage,
-  PaginationPageInput,
-  PaginationNavigation,
-} from "gends";
+import { Pagination } from "gends";
 
-function Example() {
+function MyComponent() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const totalPages = Math.ceil(totalItems / rowsPerPage);
+  const [pageSize, setPageSize] = useState(10);
+  const totalPages = 25;
 
   return (
-    <PaginationRoot>
-      <PaginationRowsPerPage value={rowsPerPage} onChange={setRowsPerPage} />
-      <PaginationPageInput
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={setCurrentPage}
-      />
-      <PaginationNavigation
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={setCurrentPage}
-      />
-    </PaginationRoot>
+    <Pagination
+      currentPage={currentPage}
+      totalPages={totalPages}
+      pageSize={pageSize}
+      onPageChange={setCurrentPage}
+      onPageSizeChange={setPageSize}
+    />
   );
 }
 ```
 
----
+## Variants
 
-## 2. Component structure
-
-The pagination system consists of four composable components:
-
-| Component               | Purpose                   | Features                      |
-| ----------------------- | ------------------------- | ----------------------------- |
-| `PaginationRoot`        | Container wrapper         | Layout and spacing            |
-| `PaginationRowsPerPage` | Items per page selector   | Dropdown with preset options  |
-| `PaginationPageInput`   | Page number input/display | Input field or simple display |
-| `PaginationNavigation`  | Previous/next navigation  | Icon buttons with states      |
-
----
-
-## 3. Rows per page selector
+### Bottom Variant (Default)
 
 ```tsx
-// Default options (5, 10, 20, 50, 100)
-<PaginationRowsPerPage
-  value={rowsPerPage}
-  onChange={setRowsPerPage}
-/>
-
-// Custom options
-<PaginationRowsPerPage
-  value={rowsPerPage}
-  onChange={setRowsPerPage}
-  options={[10, 25, 50, 100]}
+<Pagination
+  variant="bottom"
+  currentPage={1}
+  totalPages={25}
+  pageSize={10}
+  onPageChange={handlePageChange}
+  onPageSizeChange={handlePageSizeChange}
 />
 ```
 
----
+The bottom variant is the default and provides:
 
-## 4. Page input variants
+- Full page size selector
+- Page input field (desktop) or text display (mobile)
+- Navigation controls
+- Responsive layout adjustments
 
-The page input supports two display modes:
+### Top Variant
 
 ```tsx
-// Default input mode - editable input field
-<PaginationPageInput
-  currentPage={currentPage}
-  totalPages={totalPages}
-  onPageChange={setCurrentPage}
-  variant="default"
-/>
-
-// Simple display mode - read-only text
-<PaginationPageInput
-  currentPage={currentPage}
-  totalPages={totalPages}
-  onPageChange={setCurrentPage}
-  variant="simple"
+<Pagination
+  variant="top"
+  currentPage={1}
+  totalPages={25}
+  pageSize={10}
+  onPageChange={handlePageChange}
+  onPageSizeChange={handlePageSizeChange}
 />
 ```
 
----
+The top variant is more streamlined and:
 
-## 5. Navigation controls
+- Maintains page input on mobile
+- Hides "Rows per page" text on mobile
+- Optimized for table headers
+- Compact layout
+
+## Advanced Features
+
+### Custom Page Size Options
 
 ```tsx
-// Navigation with previous/next buttons
-<PaginationNavigation
-  currentPage={currentPage}
-  totalPages={totalPages}
-  onPageChange={setCurrentPage}
+<Pagination
+  currentPage={1}
+  totalPages={25}
+  pageSize={15}
+  pageSizeOptions={[15, 30, 50, 100]}
+  onPageChange={handlePageChange}
+  onPageSizeChange={handlePageSizeChange}
 />
-
-// Buttons automatically disable at boundaries
-// - Previous disabled when currentPage <= 1
-// - Next disabled when currentPage >= totalPages
 ```
 
----
-
-## 6. Advanced page input features
-
-The page input includes several smart features:
+### Interactive State Management
 
 ```tsx
-// Keyboard navigation
-// - Arrow Up: Increment page
-// - Arrow Down: Decrement page
-// - Enter: Confirm input
-// - Escape: Reset to current page
+function InteractivePagination() {
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(20);
+  const totalItems = 500;
+  const totalPages = Math.ceil(totalItems / pageSize);
 
-// Input validation
-// - Only numeric input allowed
-// - Auto-clamps to valid range (1 to totalPages)
-// - Handles empty input gracefully
+  const handlePageChange = useCallback((newPage: number) => {
+    setPage(newPage);
+  }, []);
+
+  const handlePageSizeChange = useCallback((newSize: number) => {
+    setPageSize(newSize);
+    setPage(1); // Reset to first page when changing page size
+  }, []);
+
+  return (
+    <Pagination
+      currentPage={page}
+      totalPages={totalPages}
+      pageSize={pageSize}
+      onPageChange={handlePageChange}
+      onPageSizeChange={handlePageSizeChange}
+    />
+  );
+}
 ```
 
----
+### Loading State
 
-## 7. Full prop reference
+```tsx
+<Pagination
+  currentPage={1}
+  totalPages={25}
+  pageSize={10}
+  onPageChange={handlePageChange}
+  onPageSizeChange={handlePageSizeChange}
+  isLoading={true}
+/>
+```
 
-### PaginationRoot Props
+### Empty State
 
-| Prop        | Type     | Description            |
-| ----------- | -------- | ---------------------- |
-| `className` | `string` | Additional CSS classes |
+```tsx
+<Pagination
+  currentPage={1}
+  totalPages={0}
+  pageSize={10}
+  onPageChange={handlePageChange}
+  onPageSizeChange={handlePageSizeChange}
+  isEmpty={true}
+/>
+```
 
-### PaginationRowsPerPage Props
+## Real-World Usage Examples
 
-| Prop       | Type                      | Default            | Description                 |
-| ---------- | ------------------------- | ------------------ | --------------------------- |
-| `value`    | `number`                  | -                  | Current rows per page value |
-| `onChange` | `(value: number) => void` | -                  | Value change handler        |
-| `options`  | `number[]`                | `[5,10,20,50,100]` | Available options           |
-
-### PaginationPageInput Props
-
-| Prop           | Type                     | Default     | Description           |
-| -------------- | ------------------------ | ----------- | --------------------- |
-| `currentPage`  | `number`                 | -           | Current active page   |
-| `totalPages`   | `number`                 | -           | Total number of pages |
-| `onPageChange` | `(page: number) => void` | -           | Page change handler   |
-| `variant`      | `'default' \| 'simple'`  | `'default'` | Display mode          |
-
-### PaginationNavigation Props
-
-| Prop           | Type                     | Description           |
-| -------------- | ------------------------ | --------------------- |
-| `currentPage`  | `number`                 | Current active page   |
-| `totalPages`   | `number`                 | Total number of pages |
-| `onPageChange` | `(page: number) => void` | Page change handler   |
-
----
-
-## 8. Recipes
-
-### Basic table pagination
+### Data Table Integration
 
 ```tsx
 function DataTable() {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [data, setData] = useState([]);
+  const [totalItems, setTotalItems] = useState(0);
 
-  const totalPages = Math.ceil(data.length / rowsPerPage);
-  const startIndex = (currentPage - 1) * rowsPerPage;
-  const paginatedData = data.slice(startIndex, startIndex + rowsPerPage);
+  useEffect(() => {
+    fetchData(page, pageSize).then(response => {
+      setData(response.items);
+      setTotalItems(response.total);
+    });
+  }, [page, pageSize]);
 
-  return (
-    <div>
-      <Table data={paginatedData} />
-      <PaginationRoot>
-        <PaginationRowsPerPage value={rowsPerPage} onChange={setRowsPerPage} />
-        <PaginationPageInput
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={setCurrentPage}
-        />
-        <PaginationNavigation
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={setCurrentPage}
-        />
-      </PaginationRoot>
-    </div>
-  );
-}
-```
-
-### Simple pagination (no rows selector)
-
-```tsx
-<PaginationRoot>
-  <PaginationPageInput
-    currentPage={currentPage}
-    totalPages={totalPages}
-    onPageChange={setCurrentPage}
-    variant="simple"
-  />
-  <PaginationNavigation
-    currentPage={currentPage}
-    totalPages={totalPages}
-    onPageChange={setCurrentPage}
-  />
-</PaginationRoot>
-```
-
-### Server-side pagination
-
-```tsx
-function ServerPaginatedTable() {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const { data, totalCount } = useServerData(currentPage, rowsPerPage);
-
-  const totalPages = Math.ceil(totalCount / rowsPerPage);
-
-  const handlePageChange = page => {
-    setCurrentPage(page);
-    // Server request happens automatically via useServerData
-  };
-
-  const handleRowsChange = rows => {
-    setRowsPerPage(rows);
-    setCurrentPage(1); // Reset to first page
-  };
+  const totalPages = Math.ceil(totalItems / pageSize);
 
   return (
     <div>
+      <Pagination
+        variant="top"
+        currentPage={page}
+        totalPages={totalPages}
+        pageSize={pageSize}
+        onPageChange={setPage}
+        onPageSizeChange={setPageSize}
+      />
       <Table data={data} />
-      <PaginationRoot>
-        <PaginationRowsPerPage
-          value={rowsPerPage}
-          onChange={handleRowsChange}
-          options={[10, 25, 50]}
-        />
-        <PaginationPageInput
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-        />
-        <PaginationNavigation
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-        />
-      </PaginationRoot>
+      <Pagination
+        variant="bottom"
+        currentPage={page}
+        totalPages={totalPages}
+        pageSize={pageSize}
+        onPageChange={setPage}
+        onPageSizeChange={setPageSize}
+      />
     </div>
   );
 }
 ```
 
-### Custom styled pagination
+### List View with Custom Page Sizes
 
 ```tsx
-<PaginationRoot className="bg-gray-50 p-4 rounded-lg">
-  <PaginationRowsPerPage value={rowsPerPage} onChange={setRowsPerPage} className="text-sm" />
-  <PaginationPageInput
-    currentPage={currentPage}
-    totalPages={totalPages}
-    onPageChange={setCurrentPage}
-    className="mx-4"
-  />
-  <PaginationNavigation
-    currentPage={currentPage}
-    totalPages={totalPages}
-    onPageChange={setCurrentPage}
-    className="gap-2"
-  />
-</PaginationRoot>
+function ListView() {
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(15);
+  const totalItems = 150;
+  const totalPages = Math.ceil(totalItems / pageSize);
+
+  return (
+    <div>
+      <List items={items.slice((page - 1) * pageSize, page * pageSize)} />
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        pageSize={pageSize}
+        pageSizeOptions={[15, 30, 50, 100]}
+        onPageChange={setPage}
+        onPageSizeChange={setPageSize}
+      />
+    </div>
+  );
+}
 ```
 
----
+## Accessibility Features
 
-## 9. Accessibility
+### Keyboard Navigation
 
-The Pagination components include comprehensive accessibility features:
+- **Focus Management**: All interactive elements are keyboard accessible
+- **ARIA Attributes**: Proper roles and labels for screen readers
+- **Navigation**: Arrow keys for page navigation
+- **Input**: Direct page number entry with validation
 
-- Keyboard navigation support for all interactive elements
-- Proper ARIA labels and roles
-- Focus management and visible focus indicators
-- Screen reader announcements for page changes
-- Disabled state handling
+### Screen Reader Support
 
-```tsx
-// Accessibility is built-in, but you can enhance it:
-<PaginationNavigation
-  currentPage={currentPage}
-  totalPages={totalPages}
-  onPageChange={setCurrentPage}
-  aria-label="Table pagination navigation"
-/>
-```
+- **ARIA Labels**: Clear identification of pagination purpose
+- **Status Updates**: Dynamic updates for page changes
+- **Page Information**: Clear indication of current page and total pages
 
----
+### Visual Accessibility
 
-## 10. Design Tokens
+- **Color Contrast**: Meets WCAG 2.1 contrast requirements
+- **Focus Indicators**: Clear visual feedback for keyboard focus
+- **Responsive Design**: Adapts to different screen sizes and zoom levels
 
-The Pagination components use the following design system tokens:
+## Design System Integration
 
-**Layout:**
-
-- Container: `flex items-center justify-between gap-4`
-- Navigation gap: `gap-gd-8`
-- Button size: `w-gd-24 h-gd-24`
+### Genesis Design Tokens
 
 **Typography:**
 
-- Labels: `text-sm font-400 text-color-neutral-grey-80`
-- Page input: Center-aligned text
-
-**Form Elements:**
-
-- Dropdown width: `w-gd-64`
-- Dropdown height: `h-gd-32`
-- Input width: `w-16`
-
-**Colors:**
-
-- Text: `text-color-neutral-grey-80`
-- Borders: Based on component defaults
-- Focus states: Primary color theme
+- Page Numbers: `text-en-desktop-body-s`
+- Page Size Label: `text-en-desktop-body-s`
 
 **Spacing:**
 
-- Container padding: `gap-4 whitespace-nowrap`
-- Element gaps: `gap-gd-12`, `gap-2`
+- Container: `gap-4`
+- Navigation: `gap-2`
+- Mobile Adjustments: `sm:gap-4`
 
----
+**Layout:**
 
-Consider using Pagination with:
+- Desktop: `flex-row items-center`
+- Mobile: `flex-col items-start`
 
-- **Table** — For data tables
-- **Dropdown** — For rows per page selection
-- **Input** — For page number entry
-- **IconButton** — For navigation controls
-- **Typography** — For labels and text
+## Best Practices
+
+### Performance
+
+- Use debounced page changes for input fields
+- Optimize page size options based on data volume
+- Handle loading states appropriately
+
+### User Experience
+
+- Keep page size options reasonable
+- Provide clear feedback for invalid inputs
+- Maintain consistent positioning in the UI
+- Consider mobile-first design
+
+### Integration
+
+- Follow design system guidelines
+- Maintain consistent spacing
+- Handle edge cases (empty state, loading)
+- Consider data fetching patterns
+
+## Troubleshooting
+
+### Common Issues
+
+**Page Number Validation:**
+
+- Check current page bounds
+- Handle invalid input gracefully
+- Reset to valid page when needed
+
+**Page Size Changes:**
+
+- Reset to first page on size change
+- Validate new page size
+- Update total pages calculation
+
+**Mobile Responsiveness:**
+
+- Test different screen sizes
+- Verify touch targets
+- Check layout adjustments
+
+### Migration Notes
+
+**From Previous Versions:**
+
+- Update import paths
+- Review prop changes
+- Test all variants
+- Verify accessibility
+
+Remember: The Pagination component provides a flexible and accessible way to navigate through paginated content. Choose the appropriate configuration based on your specific use case and requirements.

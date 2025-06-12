@@ -1,249 +1,362 @@
-# Notification Nudge
+# Notification Nudge Component
 
-A lightweight, non-blocking “toast” system that floats above your UI.
+## Overview
 
----
+The Notification Nudge component is a flexible and accessible notification system built with Genesis Design System tokens. It provides a comprehensive set of features for displaying non-intrusive notifications (nudges or toasts) with multiple variants, positioning options, and interactive capabilities. The component is designed for various use cases such as success confirmations, error alerts, loading states, and general information messages.
 
-## 1. Overview
+## Component API
 
-* **Purpose:** Display short-lived messages without interrupting the current workflow.
-* **API surface:**
-  * `notify(options)` – programmatically push a notification.
-  * `<NotificationProvider>` – context + toaster; wrap your application (or a subtree) once.
+### Notification Options
+
+| Prop            | Type                                                                                              | Default       | Description                                             |
+| --------------- | ------------------------------------------------------------------------------------------------- | ------------- | ------------------------------------------------------- |
+| title           | `string`                                                                                          | Required      | Main title text displayed on the notification           |
+| description     | `string`                                                                                          | `undefined`   | Optional additional detail below the title              |
+| variant         | `"info" \| "success" \| "error" \| "loading"`                                                     | `"info"`      | Visual style/type of notification                       |
+| position        | `"top-left" \| "top-center" \| "top-right" \| "bottom-left" \| "bottom-center" \| "bottom-right"` | `"top-right"` | Screen position for notification                        |
+| duration        | `number \| null`                                                                                  | `5000`        | Auto-dismiss duration in milliseconds (null for manual) |
+| showProgressBar | `boolean`                                                                                         | `false`       | Whether to show progress bar for auto-dismiss           |
+| showActions     | `boolean`                                                                                         | `false`       | Whether to show action buttons                          |
+| customIcon      | `ReactNode`                                                                                       | `undefined`   | Custom icon to override default variant icon            |
+| primaryAction   | `ActionConfig`                                                                                    | `undefined`   | Primary action button configuration                     |
+| secondaryAction | `ActionConfig`                                                                                    | `undefined`   | Secondary action button configuration                   |
+| className       | `string`                                                                                          | `undefined`   | Additional CSS classes for notification                 |
+| style           | `CSSProperties`                                                                                   | `undefined`   | Inline styles for notification                          |
+| iconStyle       | `CSSProperties`                                                                                   | `undefined`   | Inline styles for icon container                        |
+| onClose         | `() => void`                                                                                      | `undefined`   | Callback when notification is dismissed                 |
+| stackable       | `boolean`                                                                                         | `true`        | Whether multiple notifications can stack                |
+
+### Action Configuration
+
+```typescript
+interface ActionConfig {
+  label: string;
+  onClick: () => void;
+  className?: string;
+  style?: React.CSSProperties;
+}
+```
+
+### Import Statement
+
+```typescript
+import { notification-nudge } from "gends";
+```
+
+## Basic Usage
+
+### Setup Provider
 
 ```tsx
-import {
-  NotificationProvider,
-  notify,
-} from '@/components/…/notification-nudge';
+import { NotificationProvider } from "gends";
 
 function App() {
   return (
     <NotificationProvider>
-      <button
-        onClick={() =>
-          notify({ title: 'Saved!', variant: 'success' })
-        }
-      >
-        Save
-      </button>
+      <YourApp />
     </NotificationProvider>
   );
 }
 ```
 
----
+### Basic Notification
 
-## 2. Variants
+```tsx
+import { notify } from "gends";
 
-| Variant   | Background                | Default icon     | Typical use-case                   |
-|-----------|---------------------------|------------------|------------------------------------|
-| `info`    | `#141414` (neutral)       | `IcInfo`         | Neutral / contextual information   |
-| `success` | `#135610` (green)         | `IcSuccessColored` | Operation completed successfully   |
-| `error`   | `#660014` (dark-red)      | `IcErrorColored` | Failure, destructive alert         |
-| `loading` | `#141414` (neutral)       | `Spinner`        | Ongoing async operation            |
-
-> Need a different icon? Supply a `customIcon` React node.
-
----
-
-## 3. Position presets
-
-
-```
-'top-left'     'top-center'     'top-right'
-'bottom-left'  'bottom-center'  'bottom-right'   // default
-```
-
----
-
-## 4. NotificationOptions
-
-### Content
-
-| Prop          | Type      | Default | Description                                  |
-|---------------|-----------|---------|----------------------------------------------|
-| `title`       | string    | –       | Main heading (required).                     |
-| `description` | string    | `''`    | Secondary text                               |
-
-### Appearance
-
-| Prop             | Type                                          | Default       | Description                                                   |
-|------------------|-----------------------------------------------|---------------|---------------------------------------------------------------|
-| `variant`        | `'info' \| 'success' \| 'error' \| 'loading'` | `'info'`      | Visual style                                                  |
-| `position`       | See positions above                           | `'top-right'` | Where the toast appears                                       |
-| `showProgressBar`| boolean                                       | `false`       | Visual countdown                                              |
-| `customIcon`     | `React.ReactNode`                             | `undefined`   | Override default icon                                         |
-| `className`      | string                                        | –             | Extra classes for container                                   |
-| `style`          | `CSSProperties`                               | –             | Inline container styles                                       |
-| `iconStyle`      | `CSSProperties`                               | –             | Inline styles for the icon wrapper                            |
-
-### Behaviour
-
-| Prop        | Type                        | Default | Description                                                                |
-|-------------|-----------------------------|---------|----------------------------------------------------------------------------|
-| `duration`  | number (ms) \| `null`       | `5000`  | Auto-dismiss after *n* ms. `null`/`Infinity` → manual dismissal            |
-| `stackable` | boolean                     | `true`  | `false` → new toast replaces previous one                                  |
-| `onClose`   | `() => void`                | –       | Callback executed when toast disappears                                    |
-
-### Actions
-
-| Prop             | Type        | Default | Description                                                        |
-|------------------|-------------|---------|--------------------------------------------------------------------|
-| `showActions`    | boolean     | `false` | Render footer action buttons                                       |
-| `primaryAction`  | object      | –       | `{ label, onClick, className?, style? }`                           |
-| `secondaryAction`| object      | –       | Same shape as `primaryAction`                                      |
-
-> The action buttons automatically adopt a high-contrast style for each variant. Closing the toast is handled for you after the callback runs.
-
----
-
-## 5. Usage recipes
-
-Below are **copy-paste-ready** snippets that cover every variant and the most common feature combinations. Mix & match the options as you need.
-
-### 5.1 Basic variant examples
-
-```ts
-// Info (default)
-notify({ title: 'Profile updated', variant: 'info' });
-
-// Success
-notify({ title: 'Payment complete', variant: 'success' });
-
-// Error
-notify({ title: 'Something went wrong', variant: 'error' });
-
-// Loading (auto-dismiss after 4 s)
-notify({ title: 'Syncing data…', variant: 'loading', duration: 4000 });
-```
-
-### 5.2 Success with description & progress bar
-
-```ts
+// Simple info notification
 notify({
-  title: 'Uploading file…',
-  description: 'Your video will be available shortly.',
-  variant: 'success',
+  title: "Information",
+  description: "This is a basic notification",
+  variant: "info",
+});
+
+// Success notification
+notify({
+  title: "Success!",
+  description: "Operation completed successfully",
+  variant: "success",
+});
+
+// Error notification
+notify({
+  title: "Error",
+  description: "Something went wrong",
+  variant: "error",
+});
+
+// Loading notification
+notify({
+  title: "Processing",
+  description: "Please wait...",
+  variant: "loading",
+});
+```
+
+## Advanced Features
+
+### With Actions
+
+```tsx
+notify({
+  title: "Update Available",
+  description: "A new version is ready to install",
+  variant: "info",
+  showActions: true,
+  primaryAction: {
+    label: "Install Now",
+    onClick: () => handleInstall(),
+  },
+  secondaryAction: {
+    label: "Later",
+    onClick: () => handleDismiss(),
+  },
+});
+```
+
+### With Progress Bar
+
+```tsx
+notify({
+  title: "Uploading",
+  description: "Your file is being uploaded",
+  variant: "loading",
   showProgressBar: true,
+  duration: 10000, // 10 seconds
 });
 ```
 
-### 5.3 Error with actions (manual dismissal)
+### Custom Positioning
 
-```ts
+```tsx
 notify({
-  title: 'Upload failed',
-  description: 'Network error. Retry?',
-  variant: 'error',
-  duration: null,            // stay until user decides
-  showActions: true,
-  primaryAction: {
-    label: 'Retry',
-    onClick: retryUpload,
+  title: "Custom Position",
+  description: "This notification appears at the bottom center",
+  position: "bottom-center",
+  duration: 3000,
+});
+```
+
+### Non-Stackable Notifications
+
+```tsx
+notify({
+  title: "Single Notification",
+  description: "This will replace any existing notification",
+  stackable: false,
+});
+```
+
+### Custom Styling
+
+```tsx
+notify({
+  title: "Custom Styled",
+  description: "With custom colors and spacing",
+  className: "custom-notification",
+  style: {
+    backgroundColor: "#2A2A2A",
+    borderLeft: "4px solid #4B4BFF",
   },
-  secondaryAction: {
-    label: 'Cancel',
-    onClick: () => {},
-  },
-});
-```
-
-### 5.4 Loading with cancel action (indefinite)
-
-```ts
-notify({
-  title: 'Preparing export…',
-  variant: 'loading',
-  duration: null,            // manual mode
-  showActions: true,
-  secondaryAction: {
-    label: 'Abort',
-    onClick: cancelExport,
-  },
-});
-```
-
-### 5.5 Non-stackable banner
-
-```ts
-notify({
-  title: 'Maintenance mode enabled',
-  variant: 'info',
-  stackable: false,          // replaces existing banner
-  position: 'bottom-center',
-});
-```
-
-### 5.6 Custom icon & styling
-
-```ts
-notify({
-  title: 'Starred!',
-  variant: 'info',
-  customIcon: <span role="img" aria-label="star">⭐</span>,
-  className: 'border border-blue-500',
-  style: { backgroundColor: 'rgba(0,0,255,.1)' },
-  iconStyle: { color: '#00f' },
-});
-```
-
-### 5.7 Success with actions
-
-```ts
-notify({
-  title: 'Profile saved',
-  description: 'Changes will take effect next time you sign-in.',
-  variant: 'success',
-  showActions: true,
-  primaryAction: {
-    label: 'Undo',
-    onClick: revertChanges,
+  iconStyle: {
+    color: "#4B4BFF",
   },
 });
 ```
 
+## Real-World Usage Examples
 
----
+### Form Submission Feedback
 
-## 6. UX details
+```tsx
+const handleSubmit = async formData => {
+  try {
+    notify({
+      title: "Submitting",
+      description: "Please wait while we process your request",
+      variant: "loading",
+      duration: null, // Manual close
+    });
 
-* **Hover-pause:** Auto-dismiss timers pause while the pointer is over the toast.
-* **Accessibility:** Toasts live in a polite `aria-live` region (courtesy of Sonner).
-* **Reduced motion:** Respects the user’s `prefers-reduced-motion` setting.
-* **Keyboard:** `Esc` closes the most recent toast; focus is never trapped.
+    await submitForm(formData);
 
----
-
-## 7. Component anatomy
-
+    notify({
+      title: "Success!",
+      description: "Your form has been submitted successfully",
+      variant: "success",
+      duration: 5000,
+    });
+  } catch (error) {
+    notify({
+      title: "Error",
+      description: "Failed to submit form. Please try again.",
+      variant: "error",
+      showActions: true,
+      primaryAction: {
+        label: "Retry",
+        onClick: () => handleSubmit(formData),
+      },
+    });
+  }
+};
 ```
-NotificationProvider (context + Toaster)
-└── NotificationToast
-    ├── Icon (default or custom)
-    ├── Content (title + optional description)
-    ├── Actions (optional buttons)
-    └── ProgressBar (optional)
+
+### File Upload Progress
+
+```tsx
+const handleFileUpload = async file => {
+  const notificationId = notify({
+    title: "Uploading File",
+    description: `${file.name} is being uploaded`,
+    variant: "loading",
+    showProgressBar: true,
+    duration: null,
+  });
+
+  try {
+    await uploadFile(file, progress => {
+      // Update progress
+      notify({
+        id: notificationId,
+        title: "Uploading File",
+        description: `${file.name} is being uploaded`,
+        variant: "loading",
+        showProgressBar: true,
+        duration: null,
+      });
+    });
+
+    notify({
+      title: "Upload Complete",
+      description: `${file.name} has been uploaded successfully`,
+      variant: "success",
+    });
+  } catch (error) {
+    notify({
+      title: "Upload Failed",
+      description: "Failed to upload file. Please try again.",
+      variant: "error",
+      showActions: true,
+      primaryAction: {
+        label: "Retry",
+        onClick: () => handleFileUpload(file),
+      },
+    });
+  }
+};
 ```
 
----
+### Promise-based Notifications
 
-## 8. Storybook playground
+```tsx
+import { notifyPromise } from "gends";
 
-The file
-
+const handleAsyncOperation = async () => {
+  await notifyPromise(performAsyncOperation(), {
+    loading: "Processing your request...",
+    success: data => `Operation completed: ${data.result}`,
+    error: err => `Failed: ${err.message}`,
+  });
+};
 ```
-src/components/genesis/molecules/notification-nudge/notification-nudge.stories.tsx
-```
 
-demonstrates every combination listed here:
+## Accessibility Features
 
-* Info / Success / Error / Loading
-* Description
-* One / two actions
-* Progress bar & hover-pause
-* Custom icons + custom styling
-* All six positions
-* Stackable vs non-stackable
+### Keyboard Navigation
 
-Launch Storybook and explore **Feedback / NotificationNudge** to tweak knobs and copy code.
+- **Focus Management**: Notifications are focusable and can be dismissed with keyboard
+- **ARIA Roles**: Proper alert roles for screen readers
+- **Focus Trap**: Prevents focus from leaving notification when open
+
+### Screen Reader Support
+
+- **ARIA Attributes**: Proper roles and states
+- **Announcements**: Clear identification of notification purpose
+- **Status Updates**: Dynamic updates for progress and state changes
+
+### Visual Accessibility
+
+- **Color Contrast**: Meets WCAG 2.1 contrast requirements
+- **Icon Indicators**: Clear visual distinction between variants
+- **Progress Indication**: Visual feedback for timing and progress
+
+## Design System Integration
+
+### Genesis Design Tokens
+
+**Colors:**
+
+- Info: `bg-[#141414]`
+- Success: `bg-[#135610]`
+- Error: `bg-[#660014]`
+- Loading: `bg-[#141414]`
+
+**Typography:**
+
+- Title: `text-en-desktop-body-m-prominent`
+- Description: `text-en-desktop-body-s`
+
+**Spacing:**
+
+- Container: `p-gd-12`
+- Content: `gap-gd-8`
+- Actions: `gap-gd-12`
+
+**Shadows:**
+
+- Notification: `shadow-[0_0_8px_0_var(--gd-neutral-shadow-opacity)]`
+
+## Best Practices
+
+### Performance
+
+- Use appropriate duration values
+- Clean up notifications when component unmounts
+- Handle multiple notifications efficiently
+
+### User Experience
+
+- Keep messages clear and concise
+- Use appropriate variants for different states
+- Consider mobile responsiveness
+- Don't overwhelm with too many notifications
+
+### Integration
+
+- Follow design system guidelines
+- Maintain consistent spacing
+- Consider loading states
+- Handle errors gracefully
+
+## Troubleshooting
+
+### Common Issues
+
+**Notification Stacking:**
+
+- Check stackable prop
+- Verify z-index values
+- Review positioning
+
+**Auto-dismiss:**
+
+- Verify duration value
+- Check for hover pause
+- Review timer cleanup
+
+**Styling:**
+
+- Check custom styles
+- Verify design tokens
+- Review responsive behavior
+
+### Migration Notes
+
+**From Previous Versions:**
+
+- Update import paths
+- Review prop changes
+- Test all variants
+- Verify accessibility
+
+Remember: The Notification Nudge component provides a flexible and accessible way to display temporary messages to users. Choose the appropriate configuration based on your specific use case and requirements.

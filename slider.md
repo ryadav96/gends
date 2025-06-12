@@ -1,356 +1,355 @@
-# Slider
+# Slider Component
 
-A versatile slider component that supports multiple variants including single value, range, center-point, and tick marks—perfect for numeric input controls and value selection.
+## Overview
 
----
+The Slider component is a versatile and accessible input control that allows users to select values by dragging along a track. Built with Genesis Design System tokens and Radix UI primitives, it offers multiple variants including single value, range selection, center-based, and tick-marked sliders. The component provides extensive customization options for different use cases and maintains full accessibility support.
 
-## 1. Quick start
+## Component API
+
+### Slider Props
+
+| Prop          | Type                                                                | Default     | Description                              |
+| ------------- | ------------------------------------------------------------------- | ----------- | ---------------------------------------- |
+| variant       | `"single" \| "range" \| "center" \| "ticks" \| "ticks-with-labels"` | `"single"`  | Type of slider to display                |
+| size          | `"small" \| "large"`                                                | `"small"`   | Size variant of the slider               |
+| showValue     | `boolean`                                                           | `true`      | Whether to show the current value input  |
+| label         | `string`                                                            | `undefined` | Label text for the slider                |
+| disabled      | `boolean`                                                           | `false`     | Whether the slider is disabled           |
+| unit          | `SliderUnit`                                                        | `"px"`      | Unit to display with the value           |
+| inputState    | `InputState`                                                        | `"default"` | State of the input field                 |
+| tickCount     | `number`                                                            | `10`        | Number of tick marks (for tick variants) |
+| min           | `number`                                                            | `0`         | Minimum value                            |
+| max           | `number`                                                            | `100`       | Maximum value                            |
+| step          | `number`                                                            | `1`         | Step increment                           |
+| onChangeStart | `(value: number[]) => void`                                         | `undefined` | Callback when slider value change starts |
+| onChangeEnd   | `(value: number[]) => void`                                         | `undefined` | Callback when slider value change ends   |
+
+### Type Definitions
+
+```typescript
+type SliderUnit = "px" | "em" | "rem" | "%" | "vh" | "°";
+type InputState = "default" | "success" | "error" | "warning" | "focused";
+```
+
+### Import Statement
+
+```typescript
+import { Slider } from "gends";
+```
+
+## Basic Usage
+
+### Default Slider
 
 ```tsx
 import { Slider } from "gends";
 
-function Example() {
+function MyComponent() {
   return (
-    <Slider
-      variant="single"
-      size="small"
-      min={0}
-      max={100}
-      defaultValue={[50]}
-      onValueChange={value => console.log(value)}
-    />
+    <div className="w-96">
+      <Slider label="Brightness" min={0} max={100} step={1} />
+    </div>
   );
 }
 ```
 
----
+## Variants
 
-## 2. Slider variants
-
-| variant             | Description                     | Use case                  |
-| ------------------- | ------------------------------- | ------------------------- |
-| `single`            | Single thumb slider             | Simple value selection    |
-| `range`             | Two thumbs for range selection  | Min/max range picking     |
-| `center`            | Single thumb with center point  | Offset from center values |
-| `ticks`             | Single thumb with tick marks    | Stepped value selection   |
-| `ticks-with-labels` | Single thumb with labeled ticks | Precise stepped selection |
+### Single Value Slider (default)
 
 ```tsx
-<Slider variant="single" defaultValue={[25]} />
-<Slider variant="range" defaultValue={[25, 75]} />
-<Slider variant="center" defaultValue={[50]} />
-<Slider variant="ticks" tickCount={10} />
-<Slider variant="ticks-with-labels" tickCount={5} />
+<div className="w-96">
+  <Slider variant="single" label="Volume" min={0} max={100} step={1} unit="%" />
+</div>
 ```
 
----
-
-## 3. Sizes
-
-| size    | Track height | Thumb size | Recommended use |
-| ------- | ------------ | ---------- | --------------- |
-| `small` | 2px          | 16px       | Compact forms   |
-| `large` | 4px          | 20px       | Prominent input |
+### Range Slider
 
 ```tsx
-<Slider size="small" defaultValue={[50]} />
-<Slider size="large" defaultValue={[50]} />
+<div className="w-96">
+  <Slider
+    variant="range"
+    label="Price Range"
+    min={0}
+    max={1000}
+    step={10}
+    defaultValue={[200, 800]}
+    unit="$"
+  />
+</div>
 ```
 
----
-
-## 4. Input states
-
-| inputState | Description        | Visual treatment     |
-| ---------- | ------------------ | -------------------- |
-| `default`  | Normal state       | Standard colors      |
-| `success`  | Success validation | Green accent colors  |
-| `error`    | Error validation   | Red accent colors    |
-| `warning`  | Warning validation | Orange accent colors |
-| `focused`  | Focused state      | Enhanced focus ring  |
+### Center Slider
 
 ```tsx
-<Slider inputState="default" defaultValue={[50]} />
-<Slider inputState="success" defaultValue={[50]} />
-<Slider inputState="error" defaultValue={[50]} />
-<Slider inputState="warning" defaultValue={[50]} />
+<div className="w-96">
+  <Slider variant="center" label="Balance" min={-50} max={50} step={1} defaultValue={[0]} />
+</div>
 ```
 
----
-
-## 5. Value display and units
+### Slider with Ticks
 
 ```tsx
-// With value display and custom unit
-<Slider
-  showValue={true}
-  unit="px"
-  defaultValue={[100]}
-  min={0}
-  max={500}
-/>
-
-// With label
-<Slider
-  label="Opacity"
-  unit="%"
-  defaultValue={[80]}
-  min={0}
-  max={100}
-/>
-
-// Range slider with dual inputs
-<Slider
-  variant="range"
-  showValue={true}
-  unit="rem"
-  defaultValue={[1, 3]}
-  min={0}
-  max={5}
-/>
+<div className="w-96 pb-8">
+  <Slider variant="ticks" label="Opacity" min={0} max={100} step={1} tickCount={10} unit="%" />
+</div>
 ```
 
----
-
-## 6. Tick configuration
+### Slider with Ticks and Labels
 
 ```tsx
-// Standard ticks
-<Slider
-  variant="ticks"
-  tickCount={10}
-  min={0}
-  max={100}
-  defaultValue={[50]}
-/>
-
-// Labeled ticks
-<Slider
-  variant="ticks-with-labels"
-  tickCount={6}
-  min={0}
-  max={50}
-  step={10}
-  defaultValue={[20]}
-/>
+<div className="w-96 pb-12">
+  <Slider
+    variant="ticks-with-labels"
+    label="Quality"
+    min={0}
+    max={100}
+    step={1}
+    tickCount={11}
+    unit="%"
+  />
+</div>
 ```
 
----
+## Size Variants
 
-## 7. States and interaction
+### Small Size
 
 ```tsx
-// Disabled state
-<Slider disabled={true} defaultValue={[50]} />;
-
-// Controlled component
-const [value, setValue] = useState([25]);
-
-<Slider
-  value={value}
-  onValueChange={setValue}
-  onChangeStart={value => console.log("Start:", value)}
-  onChangeEnd={value => console.log("End:", value)}
-/>;
+<div className="w-96">
+  <Slider size="small" label="Volume" min={0} max={100} />
+</div>
 ```
 
----
-
-## 8. Full prop reference
-
-### Basic Props
-
-| Prop      | Type                                                                | Default    | Description                 |
-| --------- | ------------------------------------------------------------------- | ---------- | --------------------------- |
-| `variant` | `'single' \| 'range' \| 'center' \| 'ticks' \| 'ticks-with-labels'` | `'single'` | Slider behavior type        |
-| `size`    | `'small' \| 'large'`                                                | `'small'`  | Slider track and thumb size |
-| `min`     | `number`                                                            | `0`        | Minimum value               |
-| `max`     | `number`                                                            | `100`      | Maximum value               |
-| `step`    | `number`                                                            | `1`        | Step increment              |
-| `unit`    | `SliderUnit`                                                        | `'px'`     | Display unit for values     |
-
-### Value Props
-
-| Prop            | Type                        | Description                |
-| --------------- | --------------------------- | -------------------------- |
-| `value`         | `number[]`                  | Controlled value           |
-| `defaultValue`  | `number[]`                  | Initial uncontrolled value |
-| `onValueChange` | `(value: number[]) => void` | Value change handler       |
-
-### Display Props
-
-| Prop        | Type      | Default | Description                 |
-| ----------- | --------- | ------- | --------------------------- |
-| `showValue` | `boolean` | `true`  | Show value input field(s)   |
-| `label`     | `string`  | -       | Slider label text           |
-| `disabled`  | `boolean` | `false` | Disable slider interactions |
-
-### State Props
-
-| Prop         | Type                                                          | Default     | Description            |
-| ------------ | ------------------------------------------------------------- | ----------- | ---------------------- |
-| `inputState` | `'default' \| 'success' \| 'error' \| 'warning' \| 'focused'` | `'default'` | Validation/focus state |
-
-### Tick Props
-
-| Prop        | Type     | Default | Description                     |
-| ----------- | -------- | ------- | ------------------------------- |
-| `tickCount` | `number` | `10`    | Number of tick marks to display |
-
-### Event Handlers
-
-| Prop            | Type                        | Description             |
-| --------------- | --------------------------- | ----------------------- |
-| `onChangeStart` | `(value: number[]) => void` | Called when drag starts |
-| `onChangeEnd`   | `(value: number[]) => void` | Called when drag ends   |
-
-### Styling
-
-| Prop        | Type     | Description            |
-| ----------- | -------- | ---------------------- |
-| `className` | `string` | Additional CSS classes |
-
----
-
-## 9. Recipes
-
-### Basic value slider
+### Large Size
 
 ```tsx
-<Slider
-  label="Volume"
-  min={0}
-  max={100}
-  defaultValue={[75]}
-  unit="%"
-  onValueChange={value => setVolume(value[0])}
-/>
+<div className="w-96">
+  <Slider size="large" label="Zoom" min={0} max={200} step={5} />
+</div>
 ```
 
-### Range selection
+## States
+
+### Disabled State
 
 ```tsx
-<Slider
-  label="Price Range"
-  variant="range"
-  min={0}
-  max={1000}
-  defaultValue={[100, 500]}
-  unit="$"
-  onValueChange={range => setPriceRange(range)}
-/>
+<div className="w-96">
+  <Slider label="Brightness" disabled defaultValue={[50]} />
+</div>
 ```
 
-### Center-point adjustment
+## Real-World Usage Examples
+
+### Color Picker Controls
 
 ```tsx
-<Slider
-  label="Balance"
-  variant="center"
-  min={-100}
-  max={100}
-  defaultValue={[0]}
-  showValue={true}
-  onValueChange={value => setBalance(value[0])}
-/>
+function ColorPicker() {
+  const [red, setRed] = useState([255]);
+  const [green, setGreen] = useState([0]);
+  const [blue, setBlue] = useState([0]);
+
+  return (
+    <div className="space-y-4 w-96">
+      <Slider label="Red" min={0} max={255} value={red} onValueChange={setRed} unit="" />
+      <Slider label="Green" min={0} max={255} value={green} onValueChange={setGreen} unit="" />
+      <Slider label="Blue" min={0} max={255} value={blue} onValueChange={setBlue} unit="" />
+    </div>
+  );
+}
 ```
 
-### Stepped slider with ticks
+### Media Player Controls
 
 ```tsx
-<Slider
-  label="Font Size"
-  variant="ticks-with-labels"
-  min={12}
-  max={72}
-  step={4}
-  tickCount={16}
-  unit="px"
-  defaultValue={[16]}
-/>
+function MediaPlayer() {
+  const [volume, setVolume] = useState([75]);
+  const [balance, setBalance] = useState([0]);
+
+  return (
+    <div className="space-y-4 w-96">
+      <Slider label="Volume" min={0} max={100} value={volume} onValueChange={setVolume} unit="%" />
+      <Slider
+        variant="center"
+        label="Balance"
+        min={-50}
+        max={50}
+        value={balance}
+        onValueChange={setBalance}
+      />
+    </div>
+  );
+}
 ```
 
-### Disabled state
+### Form Settings
 
 ```tsx
-<Slider label="Read-only Value" disabled={true} defaultValue={[60]} showValue={true} />
+function SettingsForm() {
+  const [priceRange, setPriceRange] = useState([100, 500]);
+  const [rating, setRating] = useState([3]);
+
+  return (
+    <div className="space-y-4 w-96">
+      <Slider
+        variant="range"
+        label="Price Range"
+        min={0}
+        max={1000}
+        value={priceRange}
+        onValueChange={setPriceRange}
+        unit="$"
+      />
+      <Slider
+        variant="ticks-with-labels"
+        label="Minimum Rating"
+        min={1}
+        max={5}
+        value={rating}
+        onValueChange={setRating}
+        tickCount={5}
+        unit="⭐"
+      />
+    </div>
+  );
+}
 ```
 
-### Success validation state
+### Image Editor
 
 ```tsx
-<Slider
-  label="Valid Range"
-  variant="range"
-  inputState="success"
-  defaultValue={[20, 80]}
-  min={0}
-  max={100}
-/>
+function ImageEditor() {
+  const [brightness, setBrightness] = useState([50]);
+  const [contrast, setContrast] = useState([50]);
+  const [saturation, setSaturation] = useState([50]);
+
+  return (
+    <div className="space-y-4 w-96">
+      <Slider
+        label="Brightness"
+        min={0}
+        max={100}
+        value={brightness}
+        onValueChange={setBrightness}
+        unit="%"
+      />
+      <Slider
+        label="Contrast"
+        min={0}
+        max={100}
+        value={contrast}
+        onValueChange={setContrast}
+        unit="%"
+      />
+      <Slider
+        label="Saturation"
+        min={0}
+        max={100}
+        value={saturation}
+        onValueChange={setSaturation}
+        unit="%"
+      />
+    </div>
+  );
+}
 ```
 
----
+## Accessibility Features
 
-## 10. Accessibility
+### Keyboard Navigation
 
-The Slider component includes comprehensive accessibility features:
+- **Arrow Keys**: Increase/decrease value in small increments
+- **Page Up/Down**: Increase/decrease value in large increments
+- **Home/End**: Jump to minimum/maximum values
+- **Focus Management**: Proper focus handling and visual indicators
 
-- Proper ARIA attributes for screen readers
-- Keyboard navigation support (Arrow keys, Home, End)
-- Focus management with visible focus rings
-- Value announcements for screen readers
-- Disabled state handling
+### Screen Reader Support
 
-```tsx
-<Slider
-  label="Accessible slider"
-  defaultValue={[50]}
-  aria-label="Volume control"
-  onValueChange={value => announceValue(value)}
-/>
-```
+- **ARIA Labels**: Clear identification of slider role and purpose
+- **Value Announcements**: Current values announced on change
+- **Range Information**: Min/max values and current position communicated
 
----
+### Visual Accessibility
 
-## 11. Design Tokens
+- **Color Contrast**: Meets WCAG 2.1 contrast requirements
+- **Focus Indicators**: Clear visual feedback for keyboard users
+- **Motion**: Respects reduced motion preferences
 
-The Slider component uses the following design system tokens:
+## Design System Integration
+
+### Genesis Design Tokens
 
 **Sizing:**
 
-- Small track height: `2px`
-- Large track height: `4px`
-- Small thumb: `16px` diameter
-- Large thumb: `20px` diameter
-- Input field: `80px` width, `32px` height
+- Small Track Height: `h-[2px]`
+- Large Track Height: `h-[4px]`
+- Small Thumb: `h-[16px] w-[16px]`
+- Large Thumb: `h-[20px] w-[20px]`
 
 **Colors:**
 
-- Track background: `color-neutral-grey-40`
-- Active track: `color-primary-50`
-- Thumb: `color-primary-50`
-- Thumb hover: `color-primary-20` border
-- Focus ring: `color-primary-70`
-- Disabled: `color-neutral-grey-60`
+- Track Background: `bg-color-neutral-grey-40`
+- Range/Progress: `bg-color-primary-50`
+- Thumb: `bg-color-primary-50`
+- Disabled: `bg-color-neutral-grey-60`
 
-**Spacing:**
+**Interactive States:**
 
-- Label margin: `gd-1`
-- Value input margin: `gd-2`
-- Tick spacing: Calculated based on `tickCount`
+- Hover: `hover:after:border-color-primary-20`
+- Focus: `focus-visible:ring-color-primary-70`
+- Active: `active:bg-color-primary-60`
 
-**Typography:**
+## Best Practices
 
-- Label: `text-sm font-small`
-- Value inputs: `text-sm`
-- Unit labels: `text-muted-foreground`
+### Performance
 
----
+- Use controlled components when needed
+- Optimize re-renders for complex forms
+- Handle cleanup properly
 
-Consider using Slider with:
+### User Experience
 
-- **Form** — For numeric input controls
-- **Settings** — For preference adjustments
-- **Filters** — For range selection
-- **Media** — For volume/progress controls
-- **Design tools** — For property adjustments
+- Provide clear labels and units
+- Use appropriate step values
+- Consider mobile touch targets
+- Handle edge cases gracefully
+
+### Integration
+
+- Follow design system guidelines
+- Maintain consistent spacing
+- Consider loading states
+- Handle validation errors
+
+## Troubleshooting
+
+### Common Issues
+
+**Value Updates:**
+
+- Check controlled vs uncontrolled patterns
+- Verify onValueChange handlers
+- Review defaultValue vs value props
+
+**Styling:**
+
+- Check custom styles
+- Verify design tokens
+- Review responsive behavior
+
+**Accessibility:**
+
+- Verify ARIA attributes
+- Test keyboard navigation
+- Check screen reader announcements
+
+### Migration Notes
+
+**From Previous Versions:**
+
+- Update import paths
+- Review prop changes
+- Test all variants
+- Verify accessibility
+
+Remember: The Slider component provides a flexible and accessible way to handle value selection. Choose the appropriate variant and configuration based on your specific use case and requirements.

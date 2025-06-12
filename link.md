@@ -1,231 +1,213 @@
-# Link
+# Link Component
 
-A flexible link component that provides consistent styling, hover states, and accessibility features for navigation and external links.
+## Overview
 
----
+The Link component is a versatile and accessible navigation element built with Genesis Design System tokens. It provides a comprehensive set of variants for different use cases, including multiple sizes, subtle and prominent styles, and disabled states. The component is designed for both inline text links and standalone navigation elements, with complete accessibility support and extensive customization options.
 
-## 1. Quick start
+## Component API
 
-```tsx
+### Link Props
+
+| Prop      | Type                   | Default  | Description                   |
+| --------- | ---------------------- | -------- | ----------------------------- |
+| subtle    | `boolean`              | `true`   | Whether to use subtle styling |
+| label     | `string`               | `"link"` | Text content of the link      |
+| className | `string`               | `""`     | Additional CSS classes        |
+| disabled  | `boolean`              | `false`  | Whether the link is disabled  |
+| link      | `string`               | `""`     | URL or path to navigate to    |
+| size      | `"sm" \| "md" \| "lg"` | `"md"`   | Size variant of the link      |
+
+### Import Statement
+
+```typescript
 import { Link } from "gends";
-
-function Example() {
-  return <Link label="Click here" link="https://example.com" size="md" subtle={true} />;
-}
 ```
 
----
+## Basic Usage
 
-## 2. Sizes
-
-| size | Font size | Font weight | Recommended use  |
-| ---- | --------- | ----------- | ---------------- |
-| `sm` | 14px      | 500         | Small text links |
-| `md` | 16px      | 500         | Standard usage   |
-| `lg` | 18px      | 500         | Prominent links  |
+### Default Link
 
 ```tsx
-<Link label="Small link" size="sm" link="#" />
-<Link label="Medium link" size="md" link="#" />
-<Link label="Large link" size="lg" link="#" />
+<Link link="https://example.com" label="Visit Example" />
 ```
 
----
-
-## 3. Link styles
-
-The component supports two distinct visual styles:
-
-| style    | Description                      | Use case          |
-| -------- | -------------------------------- | ----------------- |
-| `subtle` | Subdued text color, no underline | Inline text links |
-| `bold`   | Primary color with underline     | Standalone links  |
+### Size Variants
 
 ```tsx
-// Subtle link (default)
-<Link label="Subtle link" subtle={true} link="#" />
-
-// Bold/prominent link
-<Link label="Prominent link" subtle={false} link="#" />
+<div className="flex flex-col gap-4">
+  <Link size="sm" link="https://example.com" label="Small Link" />
+  <Link size="md" link="https://example.com" label="Medium Link" />
+  <Link size="lg" link="https://example.com" label="Large Link" />
+</div>
 ```
 
----
-
-## 4. States
+### Style Variants
 
 ```tsx
-// Normal link
-<Link label="Normal link" link="https://example.com" />
-
-// Disabled link
-<Link label="Disabled link" link="#" disabled={true} />
-
-// External link (opens in new tab)
-<Link label="External link" link="https://external.com" target="_blank" />
+<div className="flex flex-col gap-4">
+  <Link subtle link="https://example.com" label="Subtle Link" />
+  <Link subtle={false} link="https://example.com" label="Prominent Link" />
+</div>
 ```
 
----
+## Advanced Features
 
-## 5. Custom styling
+### Disabled State
 
 ```tsx
-// Custom CSS classes
-<Link
-  label="Custom styled link"
-  link="#"
-  className="custom-link-class hover:text-blue-600"
-/>
-
-// Inline styles
-<Link
-  label="Styled link"
-  link="#"
-  style={{ fontWeight: 'bold', textDecoration: 'none' }}
-/>
+<div className="flex flex-col gap-4">
+  <Link disabled link="https://example.com" label="Disabled Link" />
+  <Link disabled subtle={false} link="https://example.com" label="Disabled Prominent Link" />
+</div>
 ```
 
----
-
-## 6. Full prop reference
-
-### Basic Props
-
-| Prop     | Type                   | Default  | Description                     |
-| -------- | ---------------------- | -------- | ------------------------------- |
-| `label`  | `string`               | `"link"` | Link text content (required)    |
-| `link`   | `string`               | `""`     | URL or href destination         |
-| `size`   | `'sm' \| 'md' \| 'lg'` | `'md'`   | Link size affecting font size   |
-| `subtle` | `boolean`              | `true`   | Use subtle styling vs prominent |
-
-### States
-
-| Prop       | Type      | Default | Description               |
-| ---------- | --------- | ------- | ------------------------- |
-| `disabled` | `boolean` | `false` | Disable link interactions |
-
-### Styling
-
-| Prop        | Type     | Description            |
-| ----------- | -------- | ---------------------- |
-| `className` | `string` | Additional CSS classes |
-
-### Standard Anchor Props
-
-The Link component accepts all standard HTML anchor element props including:
-
-| Prop     | Type     | Description                     |
-| -------- | -------- | ------------------------------- |
-| `target` | `string` | Where to open the linked doc    |
-| `rel`    | `string` | Relationship to linked resource |
-
----
-
-## 7. Recipes
-
-### Inline text link
+### Custom Styling
 
 ```tsx
-<p>
-  Please read our <Link label="terms of service" link="/terms" size="sm" subtle={true} /> before
-  continuing.
-</p>
+<Link className="custom-link-class" link="https://example.com" label="Custom Styled Link" />
 ```
 
-### Standalone navigation link
+## Real-World Usage Examples
+
+### Navigation Menu
 
 ```tsx
-<Link label="View all products" link="/products" size="md" subtle={false} />
+const NavigationMenu = () => {
+  return (
+    <nav className="flex flex-col gap-2">
+      <Link size="md" link="/dashboard" label="Dashboard" subtle={false} />
+      <Link size="md" link="/profile" label="Profile" />
+      <Link size="md" link="/settings" label="Settings" />
+    </nav>
+  );
+};
 ```
 
-### External link with security
+### Footer Links
 
 ```tsx
-<Link
-  label="Visit our GitHub"
-  link="https://github.com/company/repo"
-  target="_blank"
-  rel="noopener noreferrer"
-  subtle={false}
-/>
+const FooterLinks = () => {
+  return (
+    <footer className="flex flex-wrap gap-4">
+      <Link size="sm" link="/privacy" label="Privacy Policy" subtle />
+      <Link size="sm" link="/terms" label="Terms of Service" subtle />
+      <Link size="sm" link="/contact" label="Contact Us" subtle />
+    </footer>
+  );
+};
 ```
 
-### Disabled link state
+### Interactive Content
 
 ```tsx
-<Link label="Coming soon" link="#" disabled={true} size="md" />
+const InteractiveContent = () => {
+  const [isEnabled, setIsEnabled] = React.useState(true);
+
+  return (
+    <div className="space-y-4">
+      <Link size="lg" link="https://example.com" label="Interactive Link" disabled={!isEnabled} />
+      <button onClick={() => setIsEnabled(!isEnabled)}>Toggle Link</button>
+    </div>
+  );
+};
 ```
 
-### Custom styled link
+## Accessibility Features
 
-```tsx
-<Link
-  label="Custom link"
-  link="/custom"
-  className="text-purple-600 hover:text-purple-800 underline-offset-4"
-  subtle={false}
-/>
-```
+### Keyboard Navigation
 
-### Large prominent call-to-action link
+- **Tab Navigation**: Focus management through interactive elements
+- **Enter/Space**: Activate focused link
+- **Focus Management**: Clear focus indicators
 
-```tsx
-<Link label="Get started today" link="/signup" size="lg" subtle={false} className="font-bold" />
-```
+### Screen Reader Support
 
----
+- **ARIA Attributes**: Proper roles and states
+- **Link Labels**: Descriptive text for screen readers
+- **State Announcements**: Clear state changes
 
-## 8. Accessibility
+### Visual Accessibility
 
-The Link component includes several accessibility features:
+- **Focus Indicators**: Clear focus states
+- **Color Contrast**: Meets WCAG 2.1 contrast requirements
+- **Size Variants**: Multiple size options for different needs
 
-- Proper semantic anchor element usage
-- Keyboard navigation support (Enter key)
-- Focus management with visible focus rings
-- Disabled state prevents interaction and keyboard focus
-- Proper visited state styling
+## Design System Integration
 
-```tsx
-<Link
-  label="Accessible link"
-  link="/help"
-  aria-describedby="help-description"
-  title="Get help and support"
-/>
-```
-
----
-
-## 9. Design Tokens
-
-The Link component uses the following design system tokens:
-
-**Typography:**
-
-- Font sizes: `14px` (sm), `16px` (md), `18px` (lg)
-- Font weight: `500` (medium)
-- Text decoration: `underline` (for non-subtle links)
-- Underline offset: `4px`
+### Genesis Design Tokens
 
 **Colors:**
 
-- Subtle text: `text-color-text-subdued-1`
-- Prominent text: `text-color-primary-60`
-- Hover state: `text-color-primary-50`
-- Active state: `text-color-primary-60`
-- Visited state: `text-color-text-subdued-1`
-- Disabled state: `text-color-text-subdued-2` with 30% opacity
+- Primary: `var(--gd-primary-50)`, `var(--gd-primary-60)`
+- Text: `var(--gd-text-subdued-1)`, `var(--gd-text-subdued-2)`
 
-**Focus rings:**
+**Typography:**
 
-- `focus-visible:outline-gd-2`
-- `focus-visible:outline-color-primary-60`
+- Small: `text-en-desktop-body-s-prominent`
+- Medium: `text-en-desktop-body-m-prominent`
+- Large: `text-en-desktop-body-l-prominent`
 
----
+**Spacing:**
 
-Consider using Link with:
+- `gd-2`: Focus outline
+- `gd-4`: Underline offset
 
-- **Typography** — For text integration
-- **Navigation** — For menu items
-- **Card** — For clickable areas
-- **Button** — For action alternatives
-- **Icon** — For external link indicators
+**States:**
+
+- Hover: `hover:text-color-primary-50`
+- Active: `active:text-color-primary-60`
+- Visited: `visited:text-color-text-subdued-1`
+- Focus: `focus-visible:outline-gd-2 focus-visible:outline-color-primary-60`
+
+## Best Practices
+
+### Performance
+
+- Use appropriate size variants
+- Optimize link rendering
+- Handle state changes efficiently
+
+### User Experience
+
+- Choose appropriate size for context
+- Use consistent styling
+- Provide clear visual feedback
+
+### Integration
+
+- Follow design system guidelines
+- Maintain consistent spacing
+- Consider mobile responsiveness
+
+## Troubleshooting
+
+### Common Issues
+
+**Link Styling:**
+
+- Verify subtle prop usage
+- Check custom class names
+- Ensure proper color contrast
+
+**State Management:**
+
+- Handle disabled state properly
+- Manage focus states
+- Control visited states
+
+**Styling Conflicts:**
+
+- Check custom class names
+- Verify style overrides
+- Review typography tokens
+
+### Migration Notes
+
+**From Previous Versions:**
+
+- Update import paths
+- Review prop changes
+- Test all variants
+- Verify accessibility
+
+Remember: The Link component provides a flexible and accessible way to implement navigation elements. Choose the appropriate configuration based on your specific use case and requirements.
